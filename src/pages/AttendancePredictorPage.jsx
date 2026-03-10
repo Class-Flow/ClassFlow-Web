@@ -19,36 +19,36 @@ const AttendancePredictorPage = () => {
     const [courseMap, setCourseMap] = useState(new Map());
     const [selectedCourse, setSelectedCourse] = useState(null);
 
-    const fetchStats = async () => {
-        try {
-            const res = await attendanceService.getStats();
-            if (res.success && initialCourse) {
-                const cMap = new Map();
-                res.data.courses.forEach(c => {
-                    cMap.set(c.courseCode, {
-                        ...c,
-                        present: c.attendedClasses,
-                        total: c.totalClasses
-                    });
-                });
-                setCourseMap(cMap);
-
-                if (cMap.has(initialCourse)) {
-                    setSelectedCourse(cMap.get(initialCourse));
-                    const s = cMap.get(initialCourse);
-                    setStats({
-                        present: s.present,
-                        absent: s.total - s.present,
-                        total: s.total
-                    });
-                }
-            }
-        } catch (error) {
-            console.error("Failed to fetch predictor stats", error);
-        }
-    };
-
     useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                const res = await attendanceService.getStats();
+                if (res.success && initialCourse) {
+                    const cMap = new Map();
+                    res.data.courses.forEach(c => {
+                        cMap.set(c.courseCode, {
+                            ...c,
+                            present: c.attendedClasses,
+                            total: c.totalClasses
+                        });
+                    });
+                    setCourseMap(cMap);
+
+                    if (cMap.has(initialCourse)) {
+                        setSelectedCourse(cMap.get(initialCourse));
+                        const s = cMap.get(initialCourse);
+                        setStats({
+                            present: s.present,
+                            absent: s.total - s.present,
+                            total: s.total
+                        });
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch predictor stats", error);
+            }
+        };
+
         if (initialCourse) {
             fetchStats();
         }

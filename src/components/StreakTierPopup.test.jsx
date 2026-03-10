@@ -15,7 +15,7 @@ describe('StreakTierPopup', () => {
         );
 
         expect(screen.getByText('RANK UP!')).toBeInTheDocument();
-        expect(screen.getByText('Welcome to Venus')).toBeInTheDocument();
+        expect(screen.getByText('Jupiter')).toBeInTheDocument();
         // Check streak text
         expect(screen.getByText(/10/)).toBeInTheDocument();
     });
@@ -32,7 +32,7 @@ describe('StreakTierPopup', () => {
         );
 
         expect(screen.getByText('RANK DROPPED')).toBeInTheDocument();
-        expect(screen.getByText('Dropped to Mars')).toBeInTheDocument();
+        expect(screen.getByText('Saturn')).toBeInTheDocument();
         expect(screen.getByText(/0/)).toBeInTheDocument();
     });
 });

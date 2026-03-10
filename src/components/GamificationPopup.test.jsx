@@ -9,18 +9,18 @@ describe('GamificationPopup', () => {
 
         render(
             <GamificationPopup
-                show={true}
+                isOpen={true}
                 onClose={onClose}
                 statusType="completed"
             />
         );
 
         // Assert it renders
-        expect(screen.getByText('Task Completed!')).toBeInTheDocument();
+        expect(screen.getByText('LOCKED IN!')).toBeInTheDocument();
 
         // Fast forward timers to simulate auto-close
         act(() => {
-            vi.advanceTimersByTime(3000); // 2500ms display + 300ms exit
+            vi.advanceTimersByTime(5000); // 4000ms display + 400ms exit + margin
         });
 
         expect(onClose).toHaveBeenCalled();
@@ -29,13 +29,13 @@ describe('GamificationPopup', () => {
 
     it('renders different configuration based on statusType', () => {
         const { rerender } = render(
-            <GamificationPopup show={true} onClose={() => { }} statusType="missed" />
+            <GamificationPopup isOpen={true} onClose={() => { }} statusType="missed" />
         );
-        expect(screen.getByText('Streak Lost')).toBeInTheDocument();
+        expect(screen.getByText('MISSED')).toBeInTheDocument();
 
         rerender(
-            <GamificationPopup show={true} onClose={() => { }} statusType="milestone" />
+            <GamificationPopup isOpen={true} onClose={() => { }} statusType="milestone" />
         );
-        expect(screen.getByText('Milestone Reached!')).toBeInTheDocument();
+        expect(screen.getByText('MARKED')).toBeInTheDocument();
     });
 });

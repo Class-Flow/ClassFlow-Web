@@ -25,6 +25,7 @@ const ClassAttendanceDetailsPage = () => {
             return;
         }
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subject]);
 
     const fetchData = async () => {
