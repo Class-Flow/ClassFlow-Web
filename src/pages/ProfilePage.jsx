@@ -34,6 +34,7 @@ const ProfilePage = () => {
 
     // Avatar customizer state
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+    const [isAvatarViewOpen, setIsAvatarViewOpen] = useState(false);
 
     // Fallback initials
     const getInitials = (name) => {
@@ -122,17 +123,18 @@ const ProfilePage = () => {
             </header>
 
             <div className="profile-header-card card">
-                <div
-                    className="avatar-box"
-                    onClick={() => setIsAvatarModalOpen(true)}
-                    style={{ background: 'transparent', cursor: 'pointer', padding: 0, width: 80, height: 80, border: 'none' }}
-                >
-                    {user?.avatar ? (
-                        <AnimatedAvatar avatar={user.avatar} size={80} />
-                    ) : (
-                        // We use a default animated avatar if none saved, or we could fallback to initials
-                        <AnimatedAvatar size={80} />
-                    )}
+                <div className="avatar-hover-container">
+                    <div className="avatar-img-wrap">
+                        {user?.avatar ? (
+                            <AnimatedAvatar avatar={user.avatar} size={80} />
+                        ) : (
+                            <AnimatedAvatar size={80} />
+                        )}
+                    </div>
+                    <div className="avatar-hover-overlay">
+                        <button className="avatar-opt-btn" onClick={() => setIsAvatarViewOpen(true)}>View</button>
+                        <button className="avatar-opt-btn" onClick={() => setIsAvatarModalOpen(true)}>Edit</button>
+                    </div>
                 </div>
                 <div className="profile-info">
                     <div className="name-row">
@@ -195,7 +197,7 @@ const ProfilePage = () => {
             {/* Avatar Customizer Modal */}
             {isAvatarModalOpen && (
                 <div className="modal-overlay" onClick={() => setIsAvatarModalOpen(false)}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()} style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
                         <AvatarCustomizer
                             initialAvatar={user?.avatar}
                             onCancel={() => setIsAvatarModalOpen(false)}
@@ -208,6 +210,18 @@ const ProfilePage = () => {
                                 setIsAvatarModalOpen(false);
                             }}
                         />
+                    </div>
+                </div>
+            )}
+            {/* Avatar View Modal */}
+            {isAvatarViewOpen && (
+                <div className="modal-overlay" onClick={() => setIsAvatarViewOpen(false)}>
+                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ background: 'transparent', border: 'none', boxShadow: 'none', display: 'flex', justifyContent: 'center' }}>
+                        <div className="avatar-view-box">
+                            <h3 style={{color: 'var(--text-primary)', margin: 0}}>Avatar Preview</h3>
+                            {user?.avatar ? <AnimatedAvatar avatar={user.avatar} size={150} /> : <AnimatedAvatar size={150} />}
+                            <button className="btn-filled" onClick={() => setIsAvatarViewOpen(false)}>Close</button>
+                        </div>
                     </div>
                 </div>
             )}

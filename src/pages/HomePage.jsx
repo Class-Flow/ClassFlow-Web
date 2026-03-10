@@ -22,6 +22,7 @@ import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import AddEventModal from '../components/AddEventModal';
 import EventDetailsModal from '../components/EventDetailsModal';
+import AnimatedAvatar from '../components/AnimatedAvatar';
 import { eventService } from '../services/eventService';
 import { aiService } from '../services/aiService';
 
@@ -248,7 +249,7 @@ const HomePage = () => {
             {/* Header */}
             <header className="home-header">
                 <div className="header-text">
-                    <h1>{getGreeting()}</h1>
+                    <h1>Welcome Back Champ {user?.firstName || user?.name || 'User'}!</h1>
                     <p>{formatDate(currentTime)}</p>
                 </div>
                 <div className="header-actions">
@@ -258,8 +259,8 @@ const HomePage = () => {
                     {user && (
                         <div className="header-user-profile" onClick={() => navigate('/profile')} style={{cursor: 'pointer'}}>
                             <span className="user-name">{user.firstName || user.name}</span>
-                            <div className="user-avatar-circle">
-                                {user.avatar ? <img src={user.avatar} alt="avatar" /> : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
+                            <div className="user-avatar-circle" style={{background: 'transparent', border: 'none'}}>
+                                {user.avatar ? <AnimatedAvatar avatar={user.avatar} size={32} /> : <AnimatedAvatar size={32} />}
                             </div>
                         </div>
                     )}
@@ -356,13 +357,10 @@ const HomePage = () => {
                 </div>
             </section>
             
-            </div>
-
-
-            {/* FAB */}
-            <button className="fab-web" onClick={() => openCreateModal('class')}>
+            <button className="new-event-btn-dash" onClick={() => openCreateModal('class')}>
                 <HiPlus /> New Event
             </button>
+            </div>
 
             {/* Modal */}
             {/* Modal */}
