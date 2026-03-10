@@ -14,31 +14,33 @@ const ReadyPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
             >
-                <div className="eyebrow-chip">GET STARTED</div>
+                <div className="ready-main-box">
+                    <div className="eyebrow-chip">GET STARTED</div>
 
-                <h1 className="ready-title">
-                    Ready to<br />Organize?
-                </h1>
+                    <h1 className="ready-title">
+                        Ready to<br />Organize?
+                    </h1>
 
-                <p className="ready-subtitle">
-                    Choose how you want to get started.<br />
-                    Your academic command center awaits.
-                </p>
+                    <p className="ready-subtitle">
+                        Choose how you want to get started.<br />
+                        Your academic command center awaits.
+                    </p>
 
-                <div className="ready-actions">
-                    <button
-                        className="btn-create"
-                        onClick={() => navigate('/auth', { state: { isLogin: false } })}
-                    >
-                        <span className="btn-icon">🚀</span> Create Account
-                    </button>
+                    <div className="ready-actions">
+                        <button
+                            className="btn-create"
+                            onClick={() => navigate('/auth', { state: { isLogin: false } })}
+                        >
+                            <span className="btn-icon">🚀</span> Create Account
+                        </button>
 
-                    <button
-                        className="btn-signin"
-                        onClick={() => navigate('/auth', { state: { isLogin: true } })}
-                    >
-                        <span className="btn-icon">→</span> Sign In
-                    </button>
+                        <button
+                            className="btn-signin"
+                            onClick={() => navigate('/auth', { state: { isLogin: true } })}
+                        >
+                            <span className="btn-icon">→</span> Sign In
+                        </button>
+                    </div>
                 </div>
 
                 <motion.div
@@ -56,9 +58,6 @@ const ReadyPage = () => {
                     </button>
                 </motion.div>
 
-                <p className="privacy-link" onClick={() => navigate('/privacy')}>
-                    Privacy Policy
-                </p>
             </motion.div>
         </div>
     );

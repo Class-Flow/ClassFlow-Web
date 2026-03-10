@@ -228,15 +228,14 @@ const WelcomePage = () => {
                                 viewport={{ once: true, margin: "-15%" }}
                                 transition={{ duration: 0.6, ease: "easeOut" }}
                             >
-                                <div className="feat-icon-col">
-                                    <div className="feat-icon-box">
-                                        <feat.icon />
-                                    </div>
+                                <div className="feat-icon-box">
+                                    <feat.icon />
                                 </div>
-                                <div className="feat-text-col">
+                                <div className="feat-text-box">
                                     <h3>{feat.title}</h3>
                                     <p>{feat.desc}</p>
                                 </div>
+                                <div className="feat-bg-num">0{index + 1}</div>
                             </motion.div>
                         ))}
                     </div>
@@ -295,6 +294,7 @@ const WelcomePage = () => {
 
                     <div className="footer-bottom-web">
                         <p>© 2026 ClassFlow. All rights reserved.</p>
+                        <a href="/privacy" className="footer-privacy-link">Privacy Policy</a>
                     </div>
                 </footer>
             </div>
