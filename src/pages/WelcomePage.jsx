@@ -1,7 +1,12 @@
 import { useRef, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useDragControls } from 'framer-motion';
-import { HiOutlineCalendar, HiOutlineCollection, HiOutlineChartBar, HiOutlineSparkles, HiOutlineMicrophone } from 'react-icons/hi';
+import {
+    HiOutlineCalendar, HiOutlineCollection, HiOutlineChartBar,
+    HiOutlineSparkles, HiOutlineMicrophone, HiOutlineDeviceMobile,
+    HiOutlineMail
+} from 'react-icons/hi';
+import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
 import './WelcomePage.css';
 
 const TypewriterText = () => {
@@ -54,10 +59,21 @@ const TypewriterText = () => {
 const WelcomePage = () => {
     const navigate = useNavigate();
     const containerRef = useRef(null);
-
-    // Tracks the scroll of the scroll-container explicitly to make the neon rope shrink
     const { scrollYProgress } = useScroll({ container: containerRef });
     const ropeDragControls = useDragControls();
+
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = scrollYProgress.on("change", (latest) => {
+            if (latest > 0.05 && !scrolled) {
+                setScrolled(true);
+            } else if (latest <= 0.05 && scrolled) {
+                setScrolled(false);
+            }
+        });
+        return () => unsubscribe();
+    }, [scrollYProgress, scrolled]);
 
     const lineHeight = useTransform(scrollYProgress, [0, 1], ['10%', '90%']);
 
@@ -141,24 +157,50 @@ const WelcomePage = () => {
 
                     <motion.div
                         className="scroll-down-mouse"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.5 }}
+                        animate={{ opacity: scrolled ? 0 : 1 }}
+                        transition={{ duration: 0.3 }}
+                        style={{ pointerEvents: scrolled ? 'none' : 'auto' }}
                     >
                         <span className="scroll-hint">Scroll to explore</span>
                     </motion.div>
                 </section>
 
+                <section className="welcome-about">
+                    <motion.div
+                        className="about-content"
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <h2 className="section-title">What is ClassFlow?</h2>
+                        <p className="section-desc">
+                            ClassFlow is an all-in-one unified academic management platform crafted for modern learners and educators.
+                            Whether you're an individual student aiming to organize your chaotic syllabus, or an institution looking to empower your entire cohort with a centralized intelligence hub — we provide the definitive tools to eliminate academic friction.
+                        </p>
+                    </motion.div>
+                </section>
+
                 <section className="welcome-features">
+                    <motion.div
+                        className="features-header"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                    >
+                        <h2 className="section-title">Features We Have Implemented</h2>
+                        <p className="section-desc">Everything engineered to keep you consistently on top of your game.</p>
+                    </motion.div>
+
                     <div className="features-feed">
                         {features.map((feat, index) => (
                             <motion.div
                                 key={feat.id}
                                 className="feature-card-web"
-                                initial={{ opacity: 0, y: 50 }}
+                                initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-10%" }}
-                                transition={{ duration: 0.5 }}
+                                transition={{ duration: 0.4 }}
                             >
                                 <div className="feat-icon-box">
                                     <feat.icon />
@@ -177,14 +219,57 @@ const WelcomePage = () => {
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.1 }}
                         onClick={() => navigate('/ready')}
                     >
                         Begin Your Journey
                     </motion.button>
-
-                    <div className="bottom-space" />
                 </section>
+
+                <section className="welcome-download">
+                    <motion.div
+                        className="download-content"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, margin: "-10%" }}
+                    >
+                        <h2 className="section-title">Take ClassFlow Anywhere</h2>
+                        <p className="section-desc">Our dedicated mobile applications are currently being packaged. Downloads will be available shortly after official deployment!</p>
+
+                        <div className="download-buttons">
+                            <button className="download-btn disabled" disabled>
+                                <HiOutlineDeviceMobile /> App Store <span className="coming-soon">Soon</span>
+                            </button>
+                            <button className="download-btn disabled" disabled>
+                                <HiOutlineDeviceMobile /> Google Play <span className="coming-soon">Soon</span>
+                            </button>
+                        </div>
+                    </motion.div>
+                </section>
+
+                <footer className="welcome-footer">
+                    <div className="footer-content-web">
+                        <div className="connect-section">
+                            <h3>Connect With Us</h3>
+                            <p>Got questions or feedback? We'd love to hear from you as we continue to build.</p>
+                            <div className="social-links-web">
+                                <a href="#" aria-label="Twitter"><FaTwitter /></a>
+                                <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+                                <a href="#" aria-label="GitHub"><FaGithub /></a>
+                                <a href="#" aria-label="Email"><HiOutlineMail /></a>
+                            </div>
+                            <div className="contact-details">
+                                <span>support@classflow.com</span>
+                                <span className="divider-dot">•</span>
+                                <span>1-800-CLASS-FLOW</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="footer-bottom-web">
+                        <p>© 2026 ClassFlow. All rights reserved.</p>
+                    </div>
+                </footer>
             </div>
 
             <div className="rope-container">

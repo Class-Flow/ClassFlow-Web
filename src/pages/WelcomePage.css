@@ -42,6 +42,21 @@
     backdrop-filter: blur(10px);
 }
 
+/* Common Section Typography */
+.section-title {
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.section-desc {
+    font-size: 18px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 600px;
+}
+
 /* HERO */
 .welcome-hero {
     height: 100vh;
@@ -168,11 +183,35 @@
     }
 }
 
+/* ABOUT SECTION */
+.welcome-about {
+    padding: 80px 24px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(to bottom, transparent, rgba(0, 229, 255, 0.03), transparent);
+}
+
+.about-content {
+    max-width: 800px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* FEATURES SECTION */
 .welcome-features {
-    min-height: 100vh;
     padding: 60px 24px 100px 24px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 48px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -254,10 +293,6 @@
     color: rgba(0, 0, 0, 0.03);
 }
 
-.bottom-space {
-    height: 100px;
-}
-
 .begin-journey-btn {
     width: 100%;
     max-width: 400px;
@@ -277,6 +312,165 @@
 
 .begin-journey-btn:active {
     transform: scale(0.98);
+}
+
+/* DOWNLOAD SECTION */
+.welcome-download {
+    padding: 100px 24px;
+    display: flex;
+    justify-content: center;
+}
+
+.download-content {
+    max-width: 800px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.theme-light .download-content {
+    background: rgba(0, 0, 0, 0.02);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.download-buttons {
+    display: flex;
+    gap: 16px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.theme-light .download-btn {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.download-btn svg {
+    font-size: 24px;
+}
+
+.coming-soon {
+    font-size: 11px;
+    background: rgba(0, 229, 255, 0.2);
+    color: #00E5FF;
+    padding: 2px 8px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* FOOTER SECTION */
+.welcome-footer {
+    padding: 60px 24px 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.theme-light .welcome-footer {
+    background: rgba(0, 0, 0, 0.03);
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+.footer-content-web {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.connect-section h3 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.connect-section p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.social-links-web {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.social-links-web a {
+    color: var(--text-secondary);
+    font-size: 24px;
+    transition: color 0.2s, transform 0.2s;
+    background: rgba(255, 255, 255, 0.05);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-light .social-links-web a {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.social-links-web a:hover {
+    color: #00E5FF;
+    transform: translateY(-3px);
+    border-color: #00E5FF;
+}
+
+.contact-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    flex-wrap: wrap;
+}
+
+.divider-dot {
+    opacity: 0.5;
+}
+
+.footer-bottom-web {
+    width: 100%;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    color: var(--text-tertiary);
+    font-size: 14px;
+}
+
+.theme-light .footer-bottom-web {
+    border-top-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ROPE COMPONENT */
