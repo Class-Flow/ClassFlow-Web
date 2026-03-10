@@ -130,15 +130,6 @@ const WelcomePage = () => {
                     >
                         Begin Your Journey
                     </motion.button>
-                    <motion.div
-                        className="begin-journey-hint"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.4 }}
-                    >
-                        or pull the rope on the right →
-                    </motion.div>
 
                     {/* Bottom padding so user can scroll down fully */}
                     <div className="bottom-space" />

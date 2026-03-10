@@ -43,6 +43,15 @@
   /* Slightly lighter blue for dark mode visibility */
 }
 
+/* Ensure text is clearly visible on the dark background of space theme */
+.theme-space {
+  --text-primary: #FFFFFF;
+  --text-secondary: #CBD5E1;
+  --text-tertiary: #94A3B8;
+  --bg-primary: transparent;
+  --bg-surface: rgba(30, 41, 59, 0.4);
+}
+
 * {
   margin: 0;
   padding: 0;
