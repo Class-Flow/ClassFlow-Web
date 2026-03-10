@@ -23,8 +23,19 @@
 /* Logo Section */
 .logo-box-web {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-bottom: 20px;
+    gap: 12px;
+}
+
+.auth-brand-name {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin: 0;
 }
 
 .auth-logo-circle {
@@ -101,6 +112,12 @@
     width: 100%;
 }
 
+.signup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
 .input-group-web {
     position: relative;
     display: flex;
@@ -136,6 +153,22 @@
     font-size: 18px;
     color: #555;
     margin-right: 12px;
+}
+
+.select-group-web select {
+    flex: 1;
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: var(--text-primary);
+    height: 100%;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+}
+.theme-dark .select-group-web select option, 
+.theme-space .select-group-web select option {
+    background: var(--bg-surface);
 }
 
 .input-group-web input {

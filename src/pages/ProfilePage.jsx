@@ -60,6 +60,12 @@ const ProfilePage = () => {
             ]
         },
         {
+            title: 'Security',
+            items: [
+                { id: 'mfa-enabled', label: 'Enable MFA', subLabel: 'Multi-factor authentication via Email OTP', type: 'toggle', icon: HiOutlineShieldCheck }
+            ]
+        },
+        {
             title: 'Workflow',
             items: [
                 { id: 'default-view', label: 'Default View', value: 'Home', type: 'value', icon: HiOutlineViewGrid },
@@ -97,7 +103,8 @@ const ProfilePage = () => {
         'study-mode': false,
         'event-reminders': true,
         'deadline-alerts': true,
-        'voice-note-notifications': false
+        'voice-note-notifications': false,
+        'mfa-enabled': user?.settings?.mfaEnabled ?? true
     });
 
     const handleToggle = (id) => {

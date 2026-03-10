@@ -17,6 +17,16 @@ export const authService = {
         return response.data;
     },
 
+    // Verify MFA login OTP
+    verifyMfa: async (email, otp) => {
+        const response = await api.post('/auth/verify-login-otp', { email, otp });
+        if (response.data.token) {
+            sessionStorage.setItem('token', response.data.token);
+            sessionStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+        return response.data;
+    },
+
     // Logout user
     logout: () => {
         sessionStorage.removeItem('token');

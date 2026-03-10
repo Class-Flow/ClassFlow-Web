@@ -46,7 +46,15 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (credentials) => {
         const data = await authService.login(credentials);
-        // Real API returns { token, user } directly
+        // Real API returns { token, user } directly, or { requiresMfa: true }
+        if (data.user) {
+            setUser(data.user);
+        }
+        return data;
+    };
+
+    const verifyMfa = async (email, otp) => {
+        const data = await authService.verifyMfa(email, otp);
         if (data.user) {
             setUser(data.user);
         }
@@ -55,10 +63,6 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (userData) => {
         const data = await authService.register(userData);
-        // Real API register returns { message } only. 
-        // User needs to login after register, or we auto-login.
-        // For now, we don't set user here basically.
-        // setUser(data.user); // Remove this or handle auto-login if backend supports it.
         return data;
     };
 
@@ -83,6 +87,7 @@ export const AuthProvider = ({ children }) => {
         user,
         loading,
         login,
+        verifyMfa,
         register,
         logout,
         googleLogin,

@@ -15,28 +15,48 @@ const AuthPage = () => {
     const [isLogin, setIsLogin] = useState(location.state?.isLogin ?? true);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const { login, register, googleLogin } = useAuth();
-
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        name: ''
+        firstName: '',
+        lastName: '',
+        role: 'student',
+        avatar: ''
     });
+
+    const [mfaStep, setMfaStep] = useState(false);
+    const [loginEmail, setLoginEmail] = useState('');
+    const [otp, setOtp] = useState('');
+
+    const { login, verifyMfa, register, googleLogin } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            if (isLogin) {
-                await login({ email: formData.email, password: formData.password });
+            if (mfaStep) {
+                // Submit MFA OTP
+                await verifyMfa(loginEmail, otp);
                 toast.success('Welcome back!');
+                return;
+            }
+
+            if (isLogin) {
+                const response = await login({ email: formData.email, password: formData.password });
+                if (response.requiresMfa) {
+                    toast.success(response.message || 'MFA Code sent to your email.');
+                    setLoginEmail(formData.email);
+                    setMfaStep(true);
+                } else {
+                    toast.success('Welcome back!');
+                }
             } else {
-                await register({ name: formData.name, email: formData.email, password: formData.password });
-                toast.success('Account created! Please verify your email.');
-                navigate('/otp');
+                await register(formData);
+                toast.success('Account created successfully! Please sign in.');
+                setIsLogin(true); // Switch to login screen
+                setFormData(prev => ({ ...prev, password: '' })); // Clear password
             }
         } catch (error) {
-            // Error handling in API service might throw object or string
             const msg = error.response?.data?.message || error.message || 'Authentication failed';
             toast.error(msg);
         } finally {
@@ -103,69 +123,124 @@ const AuthPage = () => {
                             }}
                         />
                     </div>
+                    <h2 className="auth-brand-name">ClassFlow</h2>
                 </div>
 
                 <div className="auth-header-web">
-                    <h1>{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
-                    <p>{isLogin ? 'Sign in to continue' : 'Join our community today'}</p>
+                    <h1>{mfaStep ? 'Two-Factor Authentication' : isLogin ? 'Welcome Back' : 'Create Account'}</h1>
+                    <p>{mfaStep ? 'Enter the code sent to your email' : isLogin ? 'Sign in to continue' : 'Join our community today'}</p>
                 </div>
 
-                <form className="auth-form-web" onSubmit={handleSubmit}>
-                    {!isLogin && (
-                        <div className="input-group-web">
-                            <HiOutlineUser className="input-icon" />
+                {mfaStep ? (
+                    <form className="auth-form-web" onSubmit={handleSubmit}>
+                         <div className="input-group-web">
+                            <HiOutlineLockClosed className="input-icon" />
                             <input
                                 type="text"
-                                placeholder="Full Name"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                placeholder="6-digit OTP"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
                                 required
                             />
                         </div>
-                    )}
+                        <button type="submit" className="btn-filled-auth" disabled={loading}>
+                            {loading ? 'Verifying...' : 'Verify & Sign In'}
+                        </button>
+                        <button type="button" className="auth-footer-web toggle-btn-web" style={{marginTop: 16}} onClick={() => setMfaStep(false)}>
+                            Cancel
+                        </button>
+                    </form>
+                ) : (
+                    <form className="auth-form-web" onSubmit={handleSubmit}>
+                        {!isLogin && (
+                            <div className="signup-grid">
+                                <div className="input-group-web">
+                                    <HiOutlineUser className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="First Name"
+                                        value={formData.firstName}
+                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group-web">
+                                    <HiOutlineUser className="input-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Last Name"
+                                        value={formData.lastName}
+                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                        required
+                                    />
+                                </div>
+                                <div className="input-group-web select-group-web" style={{ gridColumn: '1 / -1' }}>
+                                    <HiOutlineAcademicCap className="input-icon" />
+                                    <select 
+                                        value={formData.role} 
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                    >
+                                        <option value="student">Student</option>
+                                        <option value="teacher">Teacher</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                                <div className="input-group-web" style={{ gridColumn: '1 / -1' }}>
+                                    <input
+                                        type="url"
+                                        placeholder="Avatar URL (Optional)"
+                                        value={formData.avatar}
+                                        onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
+                                    />
+                                </div>
+                            </div>
+                        )}
 
-                    <div className="input-group-web">
-                        <HiOutlineMail className="input-icon" />
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            required
-                        />
-                    </div>
+                        <div className="input-group-web">
+                            <HiOutlineMail className="input-icon" />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                required
+                            />
+                        </div>
 
-                    <div className="input-group-web">
-                        <HiOutlineLockClosed className="input-icon" />
-                        <input
-                            type={showPassword ? 'text' : 'password'}
-                            placeholder="Password"
-                            value={formData.password}
-                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                            required
-                        />
-                        <button
-                            type="button"
-                            className="toggle-eye"
-                            onClick={() => setShowPassword(!showPassword)}
-                        >
-                            {showPassword ? <HiEyeOff /> : <HiEye />}
+                        <div className="input-group-web">
+                            <HiOutlineLockClosed className="input-icon" />
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                placeholder="Password"
+                                value={formData.password}
+                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="toggle-eye"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <HiEyeOff /> : <HiEye />}
+                            </button>
+                        </div>
+
+                        {isLogin && <div className="forgot-password-web" onClick={() => navigate('/forgot-password')}>Forgot Password?</div>}
+
+                        <button type="submit" className="btn-filled-auth" disabled={loading}>
+                            {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+                        </button>
+                    </form>
+                )}
+
+                {!mfaStep && (
+                    <div className="auth-footer-web">
+                        <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
+                        <button className="toggle-btn-web" onClick={() => setIsLogin(!isLogin)}>
+                            {isLogin ? 'Sign Up' : 'Sign In'}
                         </button>
                     </div>
-
-                    {isLogin && <div className="forgot-password-web" onClick={() => navigate('/forgot-password')}>Forgot Password?</div>}
-
-                    <button type="submit" className="btn-filled-auth" disabled={loading}>
-                        {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
-                    </button>
-                </form>
-
-                <div className="auth-footer-web">
-                    <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
-                    <button className="toggle-btn-web" onClick={() => setIsLogin(!isLogin)}>
-                        {isLogin ? 'Sign Up' : 'Sign In'}
-                    </button>
-                </div>
+                )}
 
                 <div className="divider-web">
                     <div className="line" />

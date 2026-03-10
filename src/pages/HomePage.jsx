@@ -251,10 +251,22 @@ const HomePage = () => {
                     <h1>{getGreeting()}</h1>
                     <p>{formatDate(currentTime)}</p>
                 </div>
-                <button className="icon-btn">
-                    <HiOutlineBell />
-                </button>
+                <div className="header-actions">
+                    <button className="icon-btn">
+                        <HiOutlineBell />
+                    </button>
+                    {user && (
+                        <div className="header-user-profile" onClick={() => navigate('/profile')} style={{cursor: 'pointer'}}>
+                            <span className="user-name">{user.firstName || user.name}</span>
+                            <div className="user-avatar-circle">
+                                {user.avatar ? <img src={user.avatar} alt="avatar" /> : (user.name ? user.name.charAt(0).toUpperCase() : 'U')}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </header>
+
+            <div className="dashboard-main-box card">
 
             {/* Today's Overview */}
             <section className="section">
@@ -343,6 +355,8 @@ const HomePage = () => {
                     })}
                 </div>
             </section>
+            
+            </div>
 
 
             {/* FAB */}
