@@ -64,6 +64,15 @@ const WelcomePage = () => {
     const ropeDragControls = useDragControls();
 
     const [scrolled, setScrolled] = useState(false);
+    const [splash, setSplash] = useState(true); // Splash animation state
+
+    useEffect(() => {
+        // Run splash animation for 2 seconds
+        const timer = setTimeout(() => {
+            setSplash(false);
+        }, 2000);
+        return () => clearTimeout(timer);
+    }, []);
 
     useEffect(() => {
         const unsubscribe = scrollYProgress.on("change", (latest) => {
@@ -122,8 +131,8 @@ const WelcomePage = () => {
             <motion.div
                 className="top-left-chip"
                 initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 }}
+                animate={{ opacity: splash ? 0 : 1, x: splash ? -20 : 0 }}
+                transition={{ duration: 0.8, delay: splash ? 0 : 0.5 }}
             >
                 ACADEMIC PLANNER
             </motion.div>
@@ -131,32 +140,51 @@ const WelcomePage = () => {
             <div className="welcome-scroll-container" ref={containerRef}>
                 <section className="welcome-hero">
                     <motion.div
-                        className="welcome-logo-container"
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 1, type: "spring", bounce: 0.4 }}
+                        className="hero-center-block"
+                        initial={{ y: "20vh", scale: 1.2 }}
+                        animate={{ y: splash ? "20vh" : "0vh", scale: splash ? 1.2 : 1 }}
+                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        <div className="welcome-logo-circle">
-                            <div className="welcome-logo-ring"></div>
-                            <img src={logoImg} alt="ClassFlow Logo" className="cap-icon-img" />
-                        </div>
-                    </motion.div>
+                        <motion.div
+                            className="welcome-logo-container"
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ duration: 1.5, type: "spring", bounce: 0.4 }}
+                        >
+                            <div className="welcome-logo-circle">
+                                <div className="welcome-logo-ring"></div>
+                                <img src={logoImg} alt="ClassFlow Logo" className="cap-icon-img" />
+                            </div>
+                        </motion.div>
 
-                    <motion.div
-                        className="welcome-hero-text"
-                        initial={{ y: 50, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.8 }}
-                    >
-                        <h1 className="brand-h1">ClassFlow</h1>
-                        <div className="brand-line" />
-                        <TypewriterText />
+                        <motion.div
+                            className="welcome-hero-text"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 1.5, delay: 0.5 }}
+                        >
+                            <h1 className="brand-h1">ClassFlow</h1>
+                            <motion.div
+                                className="brand-line"
+                                animate={{ width: splash ? 0 : 60, opacity: splash ? 0 : 1 }}
+                                transition={{ duration: 0.8, delay: 0.2 }}
+                            />
+
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: splash ? 0 : 1 }}
+                                transition={{ duration: 0.8, delay: 0.4 }}
+                            >
+                                <TypewriterText />
+                            </motion.div>
+                        </motion.div>
                     </motion.div>
 
                     <motion.div
                         className="scroll-down-mouse"
-                        animate={{ opacity: scrolled ? 0 : 1 }}
-                        transition={{ duration: 0.3 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: splash || scrolled ? 0 : 1 }}
+                        transition={{ duration: 0.8, delay: splash ? 0 : 1 }}
                         style={{ pointerEvents: scrolled ? 'none' : 'auto' }}
                     >
                         <span className="scroll-hint">Scroll to explore</span>
@@ -195,19 +223,20 @@ const WelcomePage = () => {
                             <motion.div
                                 key={feat.id}
                                 className="feature-card-web"
-                                initial={{ opacity: 0, y: 30 }}
+                                initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-10%" }}
-                                transition={{ duration: 0.4 }}
+                                viewport={{ once: true, margin: "-15%" }}
+                                transition={{ duration: 0.6, ease: "easeOut" }}
                             >
-                                <div className="feat-icon-box">
-                                    <feat.icon />
+                                <div className="feat-icon-col">
+                                    <div className="feat-icon-box">
+                                        <feat.icon />
+                                    </div>
                                 </div>
-                                <div className="feat-text-box">
+                                <div className="feat-text-col">
                                     <h3>{feat.title}</h3>
                                     <p>{feat.desc}</p>
                                 </div>
-                                <div className="feat-bg-num">{feat.id}</div>
                             </motion.div>
                         ))}
                     </div>
@@ -270,7 +299,12 @@ const WelcomePage = () => {
                 </footer>
             </div>
 
-            <div className="rope-container">
+            <motion.div
+                className="rope-container"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: splash ? 0 : 1 }}
+                transition={{ duration: 1, delay: splash ? 0 : 1.5 }}
+            >
                 <motion.div className="rope-line" style={{ height: lineHeight }} />
                 <motion.div
                     className="rope-handle"
@@ -283,12 +317,12 @@ const WelcomePage = () => {
                     <div className="rope-dot" />
                     <div className="rope-tooltip">Pull down ↓</div>
                 </motion.div>
-            </div>
+            </motion.div>
 
             <button className="mobile-skip-btn" onClick={() => navigate('/ready')}>
                 Skip ↓
             </button>
-        </div>
+        </div >
     );
 };
 
