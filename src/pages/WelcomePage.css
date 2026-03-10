@@ -17,12 +17,29 @@
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
-    padding-bottom: 20vh;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* Hide scrollbar for clean look */
 .welcome-scroll-container::-webkit-scrollbar {
     width: 0px;
+}
+
+/* Top Left Chip */
+.top-left-chip {
+    position: absolute;
+    top: 32px;
+    left: 32px;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(77, 208, 225, 0.4);
+    color: #4DD0E1;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    backdrop-filter: blur(10px);
 }
 
 /* HERO */
@@ -33,16 +50,17 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    padding-bottom: 5vh;
 }
 
 .welcome-logo-container {
-    margin-bottom: 40px;
+    margin-bottom: 32px;
     z-index: 2;
 }
 
 .welcome-logo-circle {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     background: white;
     border-radius: 50%;
     display: flex;
@@ -50,14 +68,15 @@
     justify-content: center;
     box-shadow: 0 0 60px rgba(255, 255, 255, 0.2);
     position: relative;
+    margin: 0 auto;
 }
 
 .welcome-logo-ring {
     position: absolute;
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
-    border: 6px solid;
+    border: 5px solid;
     border-color: #3b82f6 #14b8a6 #3b82f6 #312e81;
     animation: rotate 10s linear infinite;
 }
@@ -73,8 +92,8 @@
 }
 
 .cap-icon {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     z-index: 3;
 }
 
@@ -84,73 +103,42 @@
 }
 
 .brand-h1 {
-    font-size: 52px;
+    font-size: 56px;
     font-weight: 900;
     margin: 0;
     letter-spacing: -2px;
 }
 
 .brand-line {
-    width: 40px;
+    width: 60px;
     height: 2px;
     background: var(--text-secondary);
-    margin: 16px auto;
+    margin: 20px auto;
 }
 
-.brand-subtitle {
-    font-size: 16px;
-    color: var(--text-secondary);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-}
-
-/* FEATURES SECTION */
-.welcome-features {
-    min-height: 100vh;
-    padding: 100px 24px 100px 24px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.intro-text {
-    margin-bottom: 80px;
-    text-align: center;
-    max-width: 600px;
-}
-
-.intro-text .eyebrow-chip {
-    display: inline-block;
-    padding: 6px 16px;
-    border-radius: 20px;
-    border: 1px solid rgba(77, 208, 225, 0.3);
-    color: #4DD0E1;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.intro-text .title {
-    font-size: 64px;
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 24px;
-}
-
-.intro-text .subtitle {
+.typing-container {
     font-size: 20px;
     color: var(--text-secondary);
-    margin-bottom: 24px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.scroll-down-mouse {
+    position: absolute;
+    bottom: 40px;
 }
 
 .scroll-hint {
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 600;
     color: #4DD0E1;
     display: flex;
     align-items: center;
+    flex-direction: column;
     gap: 8px;
     opacity: 0.8;
 }
@@ -158,24 +146,36 @@
 .scroll-hint::after {
     content: "↓";
     font-weight: bold;
+    animation: bounce 2s infinite;
 }
 
-.features-chip {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    color: #4DD0E1;
-    margin-bottom: 32px;
+@keyframes bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+/* FEATURES SECTION */
+.welcome-features {
+    min-height: 100vh;
+    padding: 60px 24px 100px 24px;
+    width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
-}
-
-.features-chip::before {
-    content: "";
-    width: 20px;
-    height: 2px;
-    background: #4DD0E1;
 }
 
 .features-feed {
@@ -190,9 +190,9 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 16px;
-    padding: 24px;
+    padding: 32px;
     display: flex;
-    gap: 20px;
+    gap: 24px;
     position: relative;
     overflow: hidden;
     align-items: center;
@@ -205,15 +205,15 @@
 }
 
 .feat-icon-box {
-    width: 48px;
-    height: 48px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background: rgba(77, 208, 225, 0.1);
     color: #4DD0E1;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 32px;
     flex-shrink: 0;
     border: 1px solid rgba(77, 208, 225, 0.3);
 }
@@ -225,7 +225,7 @@
 }
 
 .feat-text-box h3 {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 700;
     margin-bottom: 8px;
     z-index: 2;
@@ -233,7 +233,7 @@
 }
 
 .feat-text-box p {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--text-secondary);
     line-height: 1.5;
     z-index: 2;
@@ -242,9 +242,9 @@
 
 .feat-bg-num {
     position: absolute;
-    right: 12px;
-    bottom: -10px;
-    font-size: 80px;
+    right: 16px;
+    bottom: -15px;
+    font-size: 100px;
     font-weight: 900;
     color: rgba(255, 255, 255, 0.03);
     z-index: 1;
@@ -279,19 +279,10 @@
     transform: scale(0.98);
 }
 
-.begin-journey-hint {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
 /* ROPE COMPONENT */
 .rope-container {
     position: fixed;
-    right: calc(max(24px, 50vw - 400px));
+    right: 40px;
     top: 50px;
     height: calc(100vh - 100px);
     width: 20px;
@@ -321,7 +312,6 @@
     cursor: grab;
     z-index: 101;
     transform: translateX(0);
-    /* Center over line */
 }
 
 .rope-handle:active {
@@ -373,7 +363,6 @@
 @media (max-width: 768px) {
     .rope-container {
         display: none;
-        /* Rope might be hard to use on small touch devices, better to show skip btn */
     }
 }
 
