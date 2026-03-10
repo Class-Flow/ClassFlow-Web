@@ -25,6 +25,8 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import WelcomePage from './pages/WelcomePage';
 import OnboardingPage from './pages/OnboardingPage';
 import OtpPage from './pages/OtpPage';
+import ReadyPage from './pages/ReadyPage';
+import OrganizationProPage from './pages/OrganizationProPage';
 
 // Icons
 import {
@@ -79,7 +81,7 @@ import Footer from './components/Footer';
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return <div className="loading-screen"><LoadingSpinner /></div>;
-  return isAuthenticated ? children : <Navigate to="/auth" replace />;
+  return isAuthenticated ? children : <Navigate to="/welcome" replace />;
 };
 
 const PublicRoute = ({ children }) => {
@@ -97,6 +99,8 @@ const ThemedApp = () => {
         <main className="main-content">
           <Routes>
             <Route path="/welcome" element={<PublicRoute><WelcomePage /></PublicRoute>} />
+            <Route path="/ready" element={<PublicRoute><ReadyPage /></PublicRoute>} />
+            <Route path="/org-pro" element={<PublicRoute><OrganizationProPage /></PublicRoute>} />
             <Route path="/onboarding" element={<PublicRoute><OnboardingPage /></PublicRoute>} />
             <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
             <Route path="/otp" element={<PublicRoute><OtpPage /></PublicRoute>} />

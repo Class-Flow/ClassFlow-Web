@@ -1,180 +1,381 @@
-.welcome-container {
+/* Reset */
+.welcome-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.welcome-scroll-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding-bottom: 20vh;
+}
+
+/* Hide scrollbar for clean look */
+.welcome-scroll-container::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* HERO */
+.welcome-hero {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
-    background: #040D18;
-    color: white;
 }
 
-.welcome-content {
-    padding: 0 40px;
+.welcome-logo-container {
+    margin-bottom: 40px;
     z-index: 2;
+}
+
+.welcome-logo-circle {
+    width: 200px;
+    height: 200px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.welcome-logo-ring {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 6px solid;
+    border-color: #3b82f6 #14b8a6 #3b82f6 #312e81;
+    animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.cap-icon {
+    width: 100px;
+    height: 100px;
+    z-index: 3;
+}
+
+.welcome-hero-text {
+    text-align: center;
+    z-index: 2;
+}
+
+.brand-h1 {
+    font-size: 52px;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -2px;
+}
+
+.brand-line {
+    width: 40px;
+    height: 2px;
+    background: var(--text-secondary);
+    margin: 16px auto;
+}
+
+.brand-subtitle {
+    font-size: 16px;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* FEATURES SECTION */
+.welcome-features {
+    min-height: 100vh;
+    padding: 100px 24px 100px 24px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.intro-text {
+    margin-bottom: 80px;
+    text-align: center;
     max-width: 600px;
 }
 
-.eyebrow-chip {
+.intro-text .eyebrow-chip {
     display: inline-block;
-    padding: 6px 14px;
-    border: 1px solid rgba(0, 217, 255, 0.35);
-    background: rgba(0, 217, 255, 0.07);
+    padding: 6px 16px;
     border-radius: 20px;
-    color: rgba(0, 217, 255, 0.85);
+    border: 1px solid rgba(77, 208, 225, 0.3);
+    color: #4DD0E1;
     font-size: 11px;
-    letter-spacing: 2.8px;
     font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.intro-text .title {
+    font-size: 64px;
+    font-weight: 900;
+    line-height: 1;
     margin-bottom: 24px;
 }
 
-.brand-title {
-    font-size: 84px;
-    font-weight: 900;
-    margin: 0;
-    letter-spacing: 1.2px;
-    line-height: 1;
-    background: linear-gradient(135deg, #ffffff, #B0E8FF);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+.intro-text .subtitle {
+    font-size: 20px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
 }
 
-.accent-line {
-    width: 56px;
-    height: 4px;
-    background: linear-gradient(90deg, #00D9FF, #06D6D6);
-    border-radius: 2px;
-    margin: 12px 0 32px;
-}
-
-.subtitle {
-    font-size: 19px;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.7;
-    letter-spacing: 0.25px;
-    margin-bottom: 48px;
-}
-
-.features-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 48px;
-}
-
-.feature-item {
+.scroll-hint {
+    font-size: 12px;
+    color: #4DD0E1;
     display: flex;
     align-items: center;
-    gap: 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(0, 217, 255, 0.15);
-    padding: 16px 20px;
-    border-radius: 16px;
+    gap: 8px;
+    opacity: 0.8;
 }
 
-.feature-number {
-    font-size: 24px;
-    font-weight: 900;
-    color: rgba(0, 217, 255, 0.4);
-    font-family: monospace;
+.scroll-hint::after {
+    content: "↓";
+    font-weight: bold;
 }
 
-.feature-item h4 {
-    margin: 0 0 4px 0;
-    font-size: 15px;
-    font-weight: 700;
-    color: white;
-}
-
-.feature-item p {
-    margin: 0;
+.features-chip {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #4DD0E1;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.begin-btn {
+.features-chip::before {
+    content: "";
+    width: 20px;
+    height: 2px;
+    background: #4DD0E1;
+}
+
+.features-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
     width: 100%;
-    padding: 20px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #00D9FF, #06D6D6);
-    color: #040D18;
+    max-width: 800px;
+}
+
+.feature-card-web {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.theme-light .feature-card-web {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.feat-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(77, 208, 225, 0.1);
+    color: #4DD0E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    border: 1px solid rgba(77, 208, 225, 0.3);
+}
+
+.theme-light .feat-icon-box {
+    background: rgba(0, 176, 255, 0.1);
+    color: #00B0FF;
+    border-color: rgba(0, 176, 255, 0.3);
+}
+
+.feat-text-box h3 {
     font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    z-index: 2;
+    position: relative;
+}
+
+.feat-text-box p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    z-index: 2;
+    position: relative;
+}
+
+.feat-bg-num {
+    position: absolute;
+    right: 12px;
+    bottom: -10px;
+    font-size: 80px;
     font-weight: 900;
-    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.03);
+    z-index: 1;
+}
+
+.theme-light .feat-bg-num {
+    color: rgba(0, 0, 0, 0.03);
+}
+
+.bottom-space {
+    height: 100px;
+}
+
+.begin-journey-btn {
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #00E5FF, #00B0FF);
+    color: #000;
+    font-size: 18px;
+    font-weight: 700;
     border: none;
     cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 60px;
+    box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+    transition: transform 0.2s;
+    text-align: center;
 }
 
-.begin-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+.begin-journey-btn:active {
+    transform: scale(0.98);
 }
 
-.slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+.begin-journey-hint {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
-    opacity: 0;
+/* ROPE COMPONENT */
+.rope-container {
+    position: fixed;
+    right: 24px;
+    top: 50px;
+    height: calc(100vh - 100px);
+    width: 20px;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
 }
 
-.scale-in {
-    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    opacity: 0;
+.rope-line {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    background: #00E5FF;
+    box-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF;
+    border-radius: 2px;
+    transform-origin: top;
 }
 
-.delay-1 {
-    animation-delay: 0.2s;
+.rope-handle {
+    position: absolute;
+    /* initial dot size and pull hit area */
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: grab;
+    z-index: 101;
+    transform: translateX(0);
+    /* Center over line */
 }
 
-.delay-2 {
-    animation-delay: 0.35s;
+.rope-handle:active {
+    cursor: grabbing;
 }
 
-.delay-3 {
-    animation-delay: 0.5s;
+.rope-dot {
+    width: 12px;
+    height: 12px;
+    background: #00E5FF;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #00E5FF, 0 0 20px #00E5FF;
 }
 
-.delay-4 {
-    animation-delay: 0.65s;
+.rope-tooltip {
+    position: absolute;
+    right: 40px;
+    background: rgba(0, 229, 255, 0.15);
+    border: 1px solid rgba(0, 229, 255, 0.4);
+    color: #00E5FF;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    opacity: 0.8;
 }
 
-@keyframes slideUp {
-    from {
-        transform: translateY(50px);
-        opacity: 0;
+.mobile-skip-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    z-index: 99;
+    backdrop-filter: blur(5px);
+}
+
+.theme-light .mobile-skip-btn {
+    background: rgba(0, 0, 0, 0.1);
+    color: var(--text-primary);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .rope-container {
+        display: none;
+        /* Rope might be hard to use on small touch devices, better to show skip btn */
     }
-
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes scaleIn {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
+@media (min-width: 769px) {
+    .mobile-skip-btn {
+        display: none;
     }
 }
