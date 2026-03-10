@@ -32,7 +32,7 @@ describe('AuthPage', () => {
         expect(screen.getByText('Welcome Back')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Email')).toBeInTheDocument();
         expect(screen.getByPlaceholderText('Password')).toBeInTheDocument();
-        expect(screen.queryByPlaceholderText('Full Name')).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('First Name')).not.toBeInTheDocument();
     });
 
     it('switches to sign up form', () => {
@@ -43,7 +43,7 @@ describe('AuthPage', () => {
         );
         fireEvent.click(screen.getByText('Sign Up'));
         expect(screen.getByText('Create Account')).toBeInTheDocument();
-        expect(screen.getByPlaceholderText('Full Name')).toBeInTheDocument();
+        expect(screen.getByPlaceholderText('First Name')).toBeInTheDocument();
     });
 
     it('updates input values on change', () => {

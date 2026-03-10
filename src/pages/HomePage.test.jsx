@@ -34,7 +34,7 @@ describe('HomePage', () => {
             </BrowserRouter>
         );
 
-        expect(screen.getByText(/Good/)).toBeInTheDocument();
+        expect(screen.getByText(/Welcome Back Champ/)).toBeInTheDocument();
         expect(screen.getByText("Today's Overview")).toBeInTheDocument();
     });
 
