@@ -1,5 +1,12 @@
+import { useLocation } from 'react-router-dom';
+
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const location = useLocation();
+
+    // Hide footer on public onboarding/landing pages
+    const hideOnPaths = ['/welcome', '/ready', '/auth', '/forgot-password', '/otp', '/onboarding', '/org-pro'];
+    if (hideOnPaths.includes(location.pathname)) return null;
 
     return (
         <footer style={{

@@ -7,6 +7,7 @@ import {
     HiOutlineMail
 } from 'react-icons/hi';
 import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import logoImg from '../assets/selogo.png';
 import './WelcomePage.css';
 
 const TypewriterText = () => {
@@ -137,10 +138,7 @@ const WelcomePage = () => {
                     >
                         <div className="welcome-logo-circle">
                             <div className="welcome-logo-ring"></div>
-                            <svg className="cap-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 4L2 9L12 14L22 9L12 4Z" fill="var(--primary-blue)" />
-                                <path d="M5 10.5V16C5 18 8.13401 20 12 20C15.866 20 19 18 19 16V10.5M12 14V20" stroke="var(--primary-blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
+                            <img src={logoImg} alt="ClassFlow Logo" className="cap-icon-img" />
                         </div>
                     </motion.div>
 
@@ -188,7 +186,7 @@ const WelcomePage = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-10%" }}
                     >
-                        <h2 className="section-title">Features We Have Implemented</h2>
+                        <h2 className="section-title">Built for Your Productivity</h2>
                         <p className="section-desc">Everything engineered to keep you consistently on top of your game.</p>
                     </motion.div>
 
