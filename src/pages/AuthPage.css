@@ -27,31 +27,52 @@
     margin-bottom: 20px;
 }
 
-.logo-sq-web {
-    width: 190px;
-    height: 190px;
-    background: white;
-    border-radius: 32px;
+.auth-logo-circle {
+    width: 180px;
+    height: 180px;
+    background: transparent;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    /* Mobile matches: color: Colors.black.withOpacity(0.1), blurRadius: 30, offset: Offset(0, 10) */
-    border: none;
-    overflow: hidden;
+    position: relative;
+    margin: 0 auto;
 }
 
-.logo-img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    padding: 10px;
+.auth-logo-ring {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 5px solid;
+    border-color: #3b82f6 #14b8a6 #3b82f6 #312e81;
+    animation: auth-rotate 10s linear infinite;
+    z-index: 1;
 }
 
-.logo-sq-web svg {
-    width: 60px;
-    height: 60px;
+@keyframes auth-rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.auth-cap-icon {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    z-index: 3;
+    background: white;
+}
+
+.auth-cap-icon-svg {
+    width: 80px;
+    height: 80px;
     color: var(--primary-blue);
+    z-index: 3;
 }
 
 /* Header */
@@ -87,16 +108,23 @@
     border: 1px solid var(--border-color);
     border-radius: 12px;
     background: rgba(243, 244, 246, 0.5);
-    /* Light mode: surfaceContainerHighest (#F3F4F6) with 0.5 opacity */
     padding: 0 16px;
     height: 56px;
-    /* Mobile height */
     transition: all 0.2s;
 }
 
+.theme-dark .input-group-web,
+.theme-space .input-group-web,
 [data-theme='dark'] .input-group-web {
-    background: rgba(51, 65, 85, 0.5);
-    /* Dark mode: surfaceContainerHighest (#334155) with 0.5 opacity */
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.theme-dark .input-group-web:focus-within,
+.theme-space .input-group-web:focus-within,
+[data-theme='dark'] .input-group-web:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .input-group-web:focus-within {
