@@ -185,14 +185,6 @@ const AuthPage = () => {
                                         <option value="admin">Admin</option>
                                     </select>
                                 </div>
-                                <div className="input-group-web" style={{ gridColumn: '1 / -1' }}>
-                                    <input
-                                        type="url"
-                                        placeholder="Avatar URL (Optional)"
-                                        value={formData.avatar}
-                                        onChange={(e) => setFormData({ ...formData, avatar: e.target.value })}
-                                    />
-                                </div>
                             </div>
                         )}
 
