@@ -1,0 +1,164 @@
+.streak-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.streak-modal {
+    background: linear-gradient(135deg, var(--bg-surface), #0F172A);
+    border: 2px solid var(--accent);
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4), 0 0 50px rgba(var(--accent-rgb), 0.3);
+    border-radius: 28px;
+    padding: 30px 24px 24px;
+    max-width: 360px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transform: translateY(0) scale(1);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    color: white;
+    /* Ensure text is visible on dark gradient */
+}
+
+/* Animations */
+.streak-modal.entering {
+    transform: translateY(-100px) scale(0.7);
+    opacity: 0;
+}
+
+.streak-modal.entered {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.streak-modal.exiting {
+    transform: translateY(100px) scale(0.7);
+    opacity: 0;
+}
+
+.planet-circle {
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.planet-circle.animated {
+    animation: planetFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes planetFloat {
+    0% {
+        transform: translateY(-5px) scale(1);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    100% {
+        transform: translateY(5px) scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+    }
+}
+
+.planet-container {
+    margin: 20px 0;
+}
+
+.streak-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.tier-info-card {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+    width: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tier-emoji {
+    font-size: 30px;
+    margin-right: 12px;
+}
+
+.tier-text h4 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.tier-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.4;
+}
+
+.streak-count {
+    font-weight: 700;
+    font-size: 15px;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+}
+
+.streak-msg {
+    text-align: center;
+    font-size: 13.5px;
+    color: #94a3b8;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    padding: 0 10px;
+}
+
+.planet-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+    padding: 10px 0;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.planet-row::-webkit-scrollbar {
+    display: none;
+}
+
+.streak-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.streak-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+.streak-btn:active {
+    transform: translateY(2px);
+}

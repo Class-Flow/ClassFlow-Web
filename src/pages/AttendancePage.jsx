@@ -106,7 +106,7 @@ const AttendancePage = () => {
 
                             <div className="subject-footer">
                                 <span>{subject.attended} attended of {subject.total}</span>
-                                <button className="details-btn">
+                                <button className="details-btn" onClick={() => navigate('/attendance/details', { state: { subject } })}>
                                     Details <HiChevronRight />
                                 </button>
                             </div>

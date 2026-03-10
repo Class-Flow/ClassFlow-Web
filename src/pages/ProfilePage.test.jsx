@@ -39,7 +39,9 @@ describe('ProfilePage', () => {
             logout: vi.fn(),
         });
         vi.spyOn(ThemeContext, 'useTheme').mockReturnValue({
+            theme: 'light',
             isDark: false,
+            isSpace: false,
             toggleTheme: vi.fn(),
         });
     });

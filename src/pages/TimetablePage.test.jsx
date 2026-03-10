@@ -48,6 +48,11 @@ describe('TimetablePage', () => {
             </BrowserRouter>
         );
 
+        // Wait for initial load to finish
+        await waitFor(() => {
+            expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+        });
+
         // Click on Monday (M)
         const mondayTab = screen.getByText('M');
         fireEvent.click(mondayTab);

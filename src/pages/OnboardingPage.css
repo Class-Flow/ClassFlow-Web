@@ -1,0 +1,99 @@
+.onboarding-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+}
+
+.onboarding-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.icon-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 48px;
+}
+
+.onboarding-content h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+}
+
+.onboarding-content p {
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 320px;
+}
+
+.onboarding-footer {
+    padding: 24px;
+    padding-bottom: env(safe-area-inset-bottom, 24px);
+}
+
+.dots-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 32px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    width: 32px;
+    background: var(--primary-blue);
+}
+
+.w-full {
+    width: 100%;
+}
+
+.mb-3 {
+    margin-bottom: 12px;
+}
+
+/* Animations reused from previous components */
+.scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+    opacity: 0;
+}
+
+.delay-1 {
+    animation-delay: 0.1s;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

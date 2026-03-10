@@ -18,18 +18,28 @@ export const ThemeProvider = ({ children }) => {
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'space') {
+            document.body.classList.add('theme-space');
+        } else {
+            document.body.classList.remove('theme-space');
+        }
         localStorage.setItem('theme', theme);
     }, [theme]);
 
     const toggleTheme = () => {
-        setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+        setTheme((prev) => {
+            if (prev === 'light') return 'dark';
+            if (prev === 'dark') return 'space';
+            return 'light';
+        });
     };
 
     const value = {
         theme,
         setTheme,
         toggleTheme,
-        isDark: theme === 'dark',
+        isDark: theme === 'dark' || theme === 'space',
+        isSpace: theme === 'space',
     };
 
     return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

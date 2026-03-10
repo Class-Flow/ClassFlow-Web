@@ -31,8 +31,8 @@ const AuthPage = () => {
                 toast.success('Welcome back!');
             } else {
                 await register({ name: formData.name, email: formData.email, password: formData.password });
-                toast.success('Account created! Please sign in.');
-                setIsLogin(true);
+                toast.success('Account created! Please verify your email.');
+                navigate('/otp');
             }
         } catch (error) {
             // Error handling in API service might throw object or string

@@ -1,0 +1,252 @@
+.gamification-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.particles-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.floating-particle {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    animation: floatUp 1.6s ease-out infinite;
+}
+
+@keyframes floatUp {
+    0% {
+        transform: translate(-50%, 0) scale(0.8);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translate(calc(-50% + (random() * 40px - 20px)), -200px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+.gamification-modal {
+    background: linear-gradient(135deg, var(--bg-surface), var(--bg-secondary));
+    border: 2px solid var(--accent);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 0 40px var(--accent);
+    border-radius: 28px;
+    padding: 40px 32px;
+    max-width: 340px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0) scale(1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gamification-modal.entering {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+}
+
+.gamification-modal.entered {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.gamification-modal.exiting {
+    transform: translateY(100px) scale(0.8);
+    opacity: 0;
+}
+
+.gami-accent-bar {
+    width: 80px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.gami-accent-bar.top {
+    margin-bottom: 32px;
+}
+
+.gami-accent-bar.bottom {
+    margin-top: 28px;
+}
+
+.gami-emoji-circle {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from {
+        box-shadow: 0 0 10px var(--accent);
+    }
+
+    to {
+        box-shadow: 0 0 40px var(--accent);
+    }
+}
+
+.gami-rotating-ring {
+    position: absolute;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(transparent, var(--accent), transparent 60%);
+    opacity: 0.3;
+    animation: rotateRing 3s linear infinite;
+}
+
+@keyframes rotateRing {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.gami-emoji {
+    font-size: 55px;
+    z-index: 2;
+}
+
+.gami-title {
+    font-size: 28px;
+    font-weight: 900;
+    margin-top: 32px;
+    letter-spacing: 1.5px;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.gami-event-badge {
+    margin-top: 18px;
+    padding: 12px 20px;
+    background: rgba(128, 128, 128, 0.1);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.gami-msg {
+    margin-top: 28px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.gami-stats {
+    margin-top: 36px;
+    width: 100%;
+}
+
+.gami-stats-title {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+}
+
+.gami-stats-row {
+    display: flex;
+    gap: 14px;
+}
+
+.gami-stat-box {
+    flex: 1;
+    padding: 18px 14px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid transparent;
+}
+
+.gami-stat-box h3 {
+    margin: 10px 0 4px;
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--text-primary);
+}
+
+.gami-stat-box span {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.stat-icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid transparent;
+}
+
+.stat-icon {
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.success-box {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.success-box .stat-icon-wrapper {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.success-box .stat-icon {
+    color: var(--success-green);
+}
+
+.error-box {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.error-box .stat-icon-wrapper {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.error-box .stat-icon {
+    color: var(--error-red);
+}

@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import AnimatedAvatar from '../components/AnimatedAvatar';
+import AvatarCustomizer from '../components/AvatarCustomizer';
 import { useTheme } from '../context/ThemeContext';
 import {
     HiOutlineUser,
@@ -26,10 +29,13 @@ import {
 import './ProfilePage.css';
 
 const ProfilePage = () => {
-    const { user, logout } = useAuth();
-    const { isDark, toggleTheme } = useTheme();
+    const { user, logout, updateUser } = useAuth();
+    const { theme, isDark, toggleTheme, isSpace } = useTheme();
 
-    // Get initials
+    // Avatar customizer state
+    const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+
+    // Fallback initials
     const getInitials = (name) => {
         return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'U';
     };
@@ -47,7 +53,8 @@ const ProfilePage = () => {
         {
             title: 'Appearance',
             items: [
-                { id: 'dark-mode', label: 'Dark Mode', subLabel: 'Toggle dark theme', type: 'toggle', icon: HiOutlineMoon },
+                { id: 'timeline', label: 'My Timeline', type: 'link', icon: HiOutlineClock, path: '/timeline' },
+                { id: 'dark-mode', label: 'Theme Mode', subLabel: `Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)} (Cycle)`, type: 'toggle', icon: isSpace ? HiOutlineLightningBolt : HiOutlineMoon },
                 { id: 'color-theme', label: 'Color Theme', value: 'Professional', type: 'value', icon: HiOutlineColorSwatch },
                 { id: 'reduced-animations', label: 'Reduced Animations', subLabel: 'Minimize visual effects', type: 'toggle', icon: HiOutlineLightningBolt },
             ]
@@ -62,7 +69,8 @@ const ProfilePage = () => {
         {
             title: 'Data & Categories',
             items: [
-                { id: 'manage-categories', label: 'Manage Categories', subLabel: '5 categories', type: 'link', icon: HiOutlineCollection },
+                { id: 'organization', label: 'Organization', subLabel: 'University details', type: 'link', icon: HiOutlineOfficeBuilding, path: '/organization' },
+                { id: 'manage-categories', label: 'Manage Categories', subLabel: '5 categories', type: 'link', icon: HiOutlineCollection, path: '/categories' },
                 { id: 'export-data', label: 'Export Data', subLabel: 'Backup your events', type: 'link', icon: HiOutlineDatabase },
             ]
         },
@@ -79,7 +87,7 @@ const ProfilePage = () => {
             items: [
                 { id: 'version', label: 'Version', value: '1.0.0', type: 'simple', icon: HiOutlineInformationCircle },
                 { id: 'help', label: 'Help & Support', type: 'link', icon: HiOutlineQuestionMarkCircle },
-                { id: 'privacy', label: 'Privacy Policy', type: 'link', icon: HiOutlineShieldCheck },
+                { id: 'privacy', label: 'Privacy Policy', type: 'link', icon: HiOutlineShieldCheck, path: '/privacy' },
             ]
         }
     ];
@@ -107,8 +115,17 @@ const ProfilePage = () => {
             </header>
 
             <div className="profile-header-card card">
-                <div className="avatar-box">
-                    <span>{getInitials(user?.name)}</span>
+                <div
+                    className="avatar-box"
+                    onClick={() => setIsAvatarModalOpen(true)}
+                    style={{ background: 'transparent', cursor: 'pointer', padding: 0, width: 80, height: 80, border: 'none' }}
+                >
+                    {user?.avatar ? (
+                        <AnimatedAvatar avatar={user.avatar} size={80} />
+                    ) : (
+                        // We use a default animated avatar if none saved, or we could fallback to initials
+                        <AnimatedAvatar size={80} />
+                    )}
                 </div>
                 <div className="profile-info">
                     <div className="name-row">
@@ -127,7 +144,10 @@ const ProfilePage = () => {
                             <div
                                 key={i}
                                 className={`list-item ${item.type === 'toggle' || item.type === 'link' ? 'clickable' : ''}`}
-                                onClick={() => item.type === 'toggle' ? handleToggle(item.id) : null}
+                                onClick={() => {
+                                    if (item.type === 'toggle') handleToggle(item.id);
+                                    if (item.type === 'link' && item.path) navigate(item.path);
+                                }}
                             >
                                 <item.icon className="item-icon" />
                                 <div className="item-content">
@@ -164,6 +184,26 @@ const ProfilePage = () => {
             <button className="btn-filled logout-btn" onClick={logout} style={{ background: 'var(--error-red)' }}>
                 <HiOutlineLogout /> Sign Out
             </button>
+
+            {/* Avatar Customizer Modal */}
+            {isAvatarModalOpen && (
+                <div className="modal-overlay" onClick={() => setIsAvatarModalOpen(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()} style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+                        <AvatarCustomizer
+                            initialAvatar={user?.avatar}
+                            onCancel={() => setIsAvatarModalOpen(false)}
+                            onAvatarSelected={(newAvatar) => {
+                                // Simulate updating the user context
+                                if (user) {
+                                    updateUser({ ...user, avatar: newAvatar });
+                                    // In real app, make API call here to save avatar
+                                }
+                                setIsAvatarModalOpen(false);
+                            }}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

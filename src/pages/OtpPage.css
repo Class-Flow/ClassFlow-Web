@@ -1,0 +1,219 @@
+.otp-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: #040D18;
+    color: white;
+}
+
+.back-btn {
+    position: absolute;
+    top: max(20px, env(safe-area-inset-top));
+    left: 20px;
+    z-index: 10;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.otp-content {
+    padding: 0 26px;
+    z-index: 2;
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.eyebrow-chip {
+    display: inline-block;
+    padding: 7px 16px;
+    border: 1px solid rgba(0, 217, 255, 0.35);
+    background: rgba(0, 217, 255, 0.07);
+    border-radius: 24px;
+    color: rgba(0, 217, 255, 0.85);
+    font-size: 11px;
+    letter-spacing: 2.8px;
+    font-weight: 700;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: 900;
+    margin: 0 0 16px 0;
+    text-align: center;
+    line-height: 1.15;
+    letter-spacing: 0.4px;
+}
+
+.subtitle-box {
+    background: rgba(0, 0, 0, 0.25);
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.subtitle-box p {
+    margin: 0;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    letter-spacing: 0.15px;
+}
+
+.otp-inputs {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.otp-digit {
+    width: 50px;
+    height: 64px;
+    font-size: 28px;
+    font-weight: 800;
+    text-align: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(0, 217, 255, 0.25);
+    color: white;
+    font-family: monospace;
+    transition: all 0.2s;
+}
+
+.otp-digit:focus {
+    outline: none;
+    border-color: #00D9FF;
+    border-width: 2.5px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.otp-digit.error {
+    border-color: #FF6B6B;
+    background: rgba(255, 107, 107, 0.08);
+    color: #FF6B6B;
+}
+
+.error-text {
+    color: #FF6B6B;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 32px;
+}
+
+.actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.verify-btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #00D9FF, #06D6D6);
+    color: #040D18;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.4px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 217, 255, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.verify-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 217, 255, 0.35);
+}
+
+.verify-btn:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.cancel-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(0, 217, 255, 0.05);
+    border: 1.2px solid rgba(0, 217, 255, 0.38);
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.cancel-btn:hover {
+    background: rgba(0, 217, 255, 0.15);
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2.5px solid rgba(4, 13, 24, 0.2);
+    border-top-color: rgba(4, 13, 24, 0.85);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animations */
+.shake {
+    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}

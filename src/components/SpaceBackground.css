@@ -1,0 +1,69 @@
+.space-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    /* Place it behind everything */
+    pointer-events: none;
+    /* Let clicks pass through to UI */
+}
+
+/* Ensure global app-container goes translucent if space theme is active */
+.theme-space .app-container {
+    background: transparent !important;
+}
+
+.theme-space .main-content {
+    background: transparent !important;
+}
+
+/* We should customize cards to have a glassmorphism effect in Space Theme */
+.theme-space .card {
+    background: rgba(30, 41, 59, 0.4) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.theme-space .home-header .header-text h1,
+.theme-space .home-header .header-text p,
+.theme-space .section-title {
+    color: #fff;
+}
+
+.theme-space .bottom-nav {
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-space .auth-container-web {
+    background: rgba(15, 23, 42, 0.6) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.theme-space .auth-header-web h1,
+.theme-space .auth-header-web p {
+    color: #fff !important;
+}
+
+.theme-space .input-group-web input {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.theme-space .input-group-web input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.theme-space .auth-page-web {
+    background: transparent !important;
+}
