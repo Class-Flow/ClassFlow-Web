@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 import {
     HiOutlineBell,
     HiOutlineAcademicCap,
@@ -42,6 +43,7 @@ const HomePage = () => {
     const [procrastinationAlert, setProcrastinationAlert] = useState(null);
     const [burnoutAlert, setBurnoutAlert] = useState(null);
     const [dismissedAlerts, setDismissedAlerts] = useState({});
+    const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -58,9 +60,11 @@ const HomePage = () => {
                 ]);
                 if (procData && procData.warning && procData.warning !== 'OK') {
                     setProcrastinationAlert(procData);
+                    toast.warning("AI Detected: Procrastination Risk!", { icon: "⚠️" });
                 }
                 if (burnData && burnData.burnoutRisk) {
                     setBurnoutAlert(burnData);
+                    toast.error("AI Detected: High Burnout Risk!", { icon: "🔥" });
                 }
             } catch (err) {
                 console.error('Wellness fetch failed:', err);
@@ -68,6 +72,8 @@ const HomePage = () => {
         };
         fetchWellness();
     }, []);
+
+    const hasActiveNotifications = (procrastinationAlert && !dismissedAlerts.procrastination) || (burnoutAlert && !dismissedAlerts.burnout);
 
 
 
@@ -168,83 +174,7 @@ const HomePage = () => {
 
     return (
         <div className="home-content fade-in">
-            {/* Wellness Alerts */}
-            {procrastinationAlert && !dismissedAlerts.procrastination && (
-                <div className="wellness-alert wellness-alert-warning">
-                    <div className="alert-icon-wrap">
-                        <HiOutlineExclamation />
-                    </div>
-                    <div className="alert-body">
-                        <strong>Procrastination Detected</strong>
-                        <p className="alert-reason">{procrastinationAlert.warning}</p>
-                        <div className="alert-details">
-                            <div className="alert-stat-row">
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{procrastinationAlert.procrastinationScore}</span>
-                                    <span className="alert-stat-label">Procrastination Score</span>
-                                </div>
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{procrastinationAlert.missedDeadlines}</span>
-                                    <span className="alert-stat-label">Missed Deadlines</span>
-                                </div>
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{procrastinationAlert.rushingTasks}</span>
-                                    <span className="alert-stat-label">Rushing Tasks</span>
-                                </div>
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{procrastinationAlert.totalTasks}</span>
-                                    <span className="alert-stat-label">Total Tasks Tracked</span>
-                                </div>
-                            </div>
-                            <div className="alert-explain">
-                                <p><strong>How is this detected?</strong></p>
-                                <ul>
-                                    <li><strong>Missed Deadlines:</strong> Assignments/exams that passed their due date but are still incomplete.</li>
-                                    <li><strong>Rushing Tasks:</strong> Tasks where over 80% of the time between creation and deadline has passed, and the task is still not done — a sign of "last minute" behavior.</li>
-                                </ul>
-                                <p className="alert-tip">💡 <strong>Tip:</strong> Start your assignments early! Break big tasks into smaller sub-tasks and tackle them across multiple days.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button className="alert-dismiss" onClick={() => setDismissedAlerts(prev => ({ ...prev, procrastination: true }))}>
-                        <HiX />
-                    </button>
-                </div>
-            )}
-            {burnoutAlert && !dismissedAlerts.burnout && (
-                <div className="wellness-alert wellness-alert-danger">
-                    <div className="alert-icon-wrap">
-                        <HiOutlineFire />
-                    </div>
-                    <div className="alert-body">
-                        <strong>Burnout Risk Detected</strong>
-                        <p className="alert-reason">You've been consistently overloaded. Take a step back and prioritize rest.</p>
-                        <div className="alert-details">
-                            <div className="alert-stat-row">
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{burnoutAlert.averageDailyWorkload} min</span>
-                                    <span className="alert-stat-label">Avg Daily Workload</span>
-                                </div>
-                                <div className="alert-stat">
-                                    <span className="alert-stat-value">{burnoutAlert.overloadDays}</span>
-                                    <span className="alert-stat-label">Overloaded Days (of 7)</span>
-                                </div>
-                            </div>
-                            <div className="alert-explain">
-                                <p><strong>How is this detected?</strong></p>
-                                <ul>
-                                    <li><strong>Daily Threshold:</strong> Any day where your total task workload exceeds <strong>8 hours (480 minutes)</strong> is flagged as an overloaded day.</li>
-                                    <li><strong>Burnout Trigger:</strong> If half or more of the last 7 days were overloaded, you're at risk of burnout.</li>
-                                </ul>
-                                <p className="alert-tip">💡 <strong>Tip:</strong> Use the AI Study Planner to spread your tasks more evenly, and schedule breaks between study sessions.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <button className="alert-dismiss" onClick={() => setDismissedAlerts(prev => ({ ...prev, burnout: true }))}>
-                        <HiX />
-                    </button>
-                </div>
-            )}
+            {/* Wellness Alerts moved to notifications menu */}
 
             {/* Header */}
             <header className="home-header">
@@ -253,9 +183,55 @@ const HomePage = () => {
                     <p>{formatDate(currentTime)}</p>
                 </div>
                 <div className="header-actions">
-                    <button className="icon-btn">
-                        <HiOutlineBell />
-                    </button>
+                    <div className="notification-wrapper" style={{ position: 'relative' }}>
+                        <button className="icon-btn" onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}>
+                            <HiOutlineBell />
+                            {hasActiveNotifications && <span className="notification-dot" style={{ position: 'absolute', top: 4, right: 4, width: 8, height: 8, background: 'var(--error-red)', borderRadius: '50%' }}></span>}
+                        </button>
+                        
+                        {isNotificationsOpen && (
+                            <div className="notifications-dropdown card" style={{ position: 'absolute', top: '100%', right: 0, width: 340, zIndex: 100, display: 'flex', flexDirection: 'column', gap: 12, maxHeight: '80vh', overflowY: 'auto' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <h4 style={{ margin: 0 }}>Notifications</h4>
+                                    <button onClick={() => setIsNotificationsOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><HiX /></button>
+                                </div>
+                                {!hasActiveNotifications ? (
+                                    <p style={{ color: 'var(--text-tertiary)', fontSize: 13, textAlign: 'center', margin: '20px 0' }}>No new notifications</p>
+                                ) : (
+                                    <>
+                                        {procrastinationAlert && !dismissedAlerts.procrastination && (
+                                            <div className="wellness-alert wellness-alert-warning" style={{ margin: 0, padding: 12 }}>
+                                                <div className="alert-icon-wrap" style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--warning-amber)' }}>
+                                                    <HiOutlineExclamation size={24} />
+                                                </div>
+                                                <div className="alert-body" style={{ fontSize: 13 }}>
+                                                    <strong style={{ display: 'block', marginBottom: 4 }}>Procrastination Risk</strong>
+                                                    <p className="alert-reason" style={{ margin: 0 }}>{procrastinationAlert.warning}</p>
+                                                    <button className="alert-dismiss" style={{ position: 'absolute', top: 8, right: 8, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setDismissedAlerts(prev => ({ ...prev, procrastination: true }))}>
+                                                        <HiX />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                        {burnoutAlert && !dismissedAlerts.burnout && (
+                                            <div className="wellness-alert wellness-alert-danger" style={{ margin: 0, padding: 12 }}>
+                                                <div className="alert-icon-wrap" style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, color: 'var(--error-red)' }}>
+                                                    <HiOutlineFire size={24} />
+                                                </div>
+                                                <div className="alert-body" style={{ fontSize: 13 }}>
+                                                    <strong style={{ display: 'block', marginBottom: 4 }}>Burnout Risk</strong>
+                                                    <p className="alert-reason" style={{ margin: 0 }}>You've been consistently overloaded. Rest soon!</p>
+                                                    <button className="alert-dismiss" style={{ position: 'absolute', top: 8, right: 8, background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setDismissedAlerts(prev => ({ ...prev, burnout: true }))}>
+                                                        <HiX />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </div>
+                        )}
+                    </div>
                     {user && (
                         <div className="header-user-profile" onClick={() => navigate('/profile')} style={{cursor: 'pointer'}}>
                             <span className="user-name">{user.firstName || user.name}</span>
