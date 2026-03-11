@@ -25,12 +25,18 @@ import { eventService } from '../services/eventService';
 import { toast } from 'react-toastify';
 
 const AddEventModal = ({ isOpen, onClose, onEventAdded, initialType = 'class' }) => {
+    // Helper to get local date in YYYY-MM-DDTHH:mm format
+    const getLocalDatetimeString = (date = new Date()) => {
+        const offset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+    };
+
     const [activeTab, setActiveTab] = useState('Details');
     const [classification, setClassification] = useState(initialType);
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('No category');
-    const [startDate, setStartDate] = useState(() => new Date().toISOString().slice(0, 16));
-    const [endDate, setEndDate] = useState(() => new Date(Date.now() + 3600000).toISOString().slice(0, 16));
+    const [startDate, setStartDate] = useState(() => getLocalDatetimeString());
+    const [endDate, setEndDate] = useState(() => getLocalDatetimeString(new Date(Date.now() + 3600000)));
     const [location, setLocation] = useState('');
     const [notes, setNotes] = useState('');
     const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -75,8 +81,8 @@ const AddEventModal = ({ isOpen, onClose, onEventAdded, initialType = 'class' })
             title,
             type: classification,
             category,
-            startTime: startDate, // Map to backend schema
-            endTime: endDate,     // Map to backend schema
+            startTime: new Date(startDate).toISOString(), // Generate absolute UTC string
+            endTime: new Date(endDate).toISOString(),     // Generate absolute UTC string
             location,
             notes,
             priority: priority.toLowerCase(),

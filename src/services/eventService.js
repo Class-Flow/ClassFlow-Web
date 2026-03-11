@@ -72,16 +72,24 @@ export const eventService = {
     // Get events for a specific day
     getEventsByDay: async (date) => {
         const response = await api.get('/events');
-        const dateStr = date instanceof Date ? date.toISOString().split('T')[0] : date.split('T')[0];
+        let dateStr;
+        if (date instanceof Date) {
+            dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        } else {
+            dateStr = date.split('T')[0];
+        }
+        
         const filtered = response.data.filter(e => {
-            const eDate = new Date(e.startTime).toISOString().split('T')[0];
-            return eDate === dateStr;
+            const eD = new Date(e.startTime);
+            const eDateStr = `${eD.getFullYear()}-${String(eD.getMonth()+1).padStart(2, '0')}-${String(eD.getDate()).padStart(2, '0')}`;
+            return eDateStr === dateStr;
         });
         return {
             success: true,
             data: filtered
         };
     },
+
 
     // Get upcoming deadlines
     getUpcomingDeadlines: async (limit = 10) => {
@@ -102,8 +110,14 @@ export const eventService = {
     // Get today's stats
     getTodayStats: async () => {
         const response = await api.get('/events');
-        const today = new Date().toISOString().split('T')[0];
-        const todayEvents = response.data.filter(e => new Date(e.startTime).toISOString().split('T')[0] === today);
+        const d = new Date();
+        const today = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        
+        const todayEvents = response.data.filter(e => {
+            const eD = new Date(e.startTime);
+            const eDateStr = `${eD.getFullYear()}-${String(eD.getMonth()+1).padStart(2, '0')}-${String(eD.getDate()).padStart(2, '0')}`;
+            return eDateStr === today;
+        });
 
         return {
             success: true,
@@ -120,8 +134,19 @@ export const eventService = {
     // Get countsForDay
     getCountsForDay: async (date) => {
         const response = await api.get('/events');
-        const dateStr = date instanceof Date ? date.toISOString().split('T')[0] : date.split('T')[0];
-        const count = response.data.filter(e => new Date(e.startTime).toISOString().split('T')[0] === dateStr).length;
+        let dateStr;
+        if (date instanceof Date) {
+            dateStr = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        } else {
+            dateStr = date.split('T')[0];
+        }
+        
+        const count = response.data.filter(e => {
+            const eD = new Date(e.startTime);
+            const eDateStr = `${eD.getFullYear()}-${String(eD.getMonth()+1).padStart(2, '0')}-${String(eD.getDate()).padStart(2, '0')}`;
+            return eDateStr === dateStr;
+        }).length;
+        
         return {
             success: true,
             data: { count }
