@@ -249,7 +249,7 @@ const HomePage = () => {
             {/* Header */}
             <header className="home-header">
                 <div className="header-text">
-                    <h1>Welcome Back Champ {user?.firstName || user?.name || 'User'}!</h1>
+                    <h1>Welcome Champ {user?.firstName || user?.name || 'User'}!</h1>
                     <p>{formatDate(currentTime)}</p>
                 </div>
                 <div className="header-actions">
