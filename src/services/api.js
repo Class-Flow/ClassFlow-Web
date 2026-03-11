@@ -1,6 +1,24 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+// Sanitize URL for production
+if (API_URL.includes('railway.app') || API_URL.includes('vercel.app')) {
+    if (!API_URL.startsWith('http')) {
+        API_URL = `https://${API_URL}`;
+    } else if (API_URL.startsWith('http://')) {
+        API_URL = API_URL.replace('http://', 'https://');
+    }
+}
+
+// Ensure the URL ends with /api if it's not localhost and doesn't already end with it
+if (!API_URL.includes('localhost') && !API_URL.endsWith('/api') && !API_URL.endsWith('/api/')) {
+    // Remove trailing slash if exists before appending /api
+    if (API_URL.endsWith('/')) {
+        API_URL = API_URL.slice(0, -1);
+    }
+    API_URL = `${API_URL}/api`;
+}
 
 const api = axios.create({
     baseURL: API_URL,
