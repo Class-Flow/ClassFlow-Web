@@ -30,7 +30,7 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
     const { user, logout, updateUser } = useAuth();
-    const { theme, isDark, toggleTheme, isSpace } = useTheme();
+    const { isDarkMode, setIsDarkMode, bgTheme, setBgTheme, fontStyle, setFontStyle } = useTheme();
 
     // Avatar customizer state
     const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
@@ -41,36 +41,71 @@ const ProfilePage = () => {
         return name ? name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'U';
     };
 
+    const [categoriesLength, setCategoriesLength] = useState(() => {
+        const savedCats = localStorage.getItem('user_categories');
+        if (savedCats) return JSON.parse(savedCats).length;
+        return 4; // default hardcoded length in ManageCategoriesPage
+    });
+
     const sections = [
         {
             title: 'Appearance',
             items: [
-                { id: 'dark-mode', label: 'Theme Mode', subLabel: `Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`, type: 'toggle', icon: isSpace ? HiOutlineLightningBolt : HiOutlineMoon },
-                { id: 'timeline', label: 'My Timeline', type: 'link', icon: HiOutlineClock, path: '/timeline' },
+                { id: 'dark-mode', label: 'Dark Mode', subLabel: 'Toggle dark theme', type: 'toggle', icon: HiOutlineMoon },
+                { id: 'bg-theme', label: 'Background Theme', subLabel: bgTheme === 'space' ? 'Space Theme' : 'Minimalistic', type: 'value', icon: HiOutlineColorSwatch },
+                { id: 'font-style', label: 'Font Style', subLabel: fontStyle === 'original' ? 'Original (Outfit)' : 'Minimalistic (Inter)', type: 'value', icon: HiOutlineViewGrid },
             ]
         },
         {
             title: 'Data & Categories',
             items: [
+                { id: 'manage-categories', label: 'Manage Categories', subLabel: `${categoriesLength} categories`, type: 'link', icon: HiOutlineCollection, path: '/categories' },
                 { id: 'organization', label: 'Organization', subLabel: 'University details', type: 'link', icon: HiOutlineOfficeBuilding, path: '/organization' },
-                { id: 'manage-categories', label: 'Manage Categories', subLabel: 'Organize your events', type: 'link', icon: HiOutlineCollection, path: '/categories' },
+            ]
+        },
+        {
+            title: 'Notifications',
+            items: [
+                { id: 'event-reminders', label: 'Event Reminders', subLabel: 'Notify at reminder times set on each event', type: 'toggle', icon: HiOutlineClock },
+                { id: 'event-start-alerts', label: 'Event Start Alerts', subLabel: 'Notify when an event is beginning', type: 'toggle', icon: HiOutlineBell },
+            ]
+        },
+        {
+            title: 'Gamification',
+            items: [
+                { id: 'event-popups', label: 'Event Popups', subLabel: 'Show celebratory popups when marking events', type: 'toggle', icon: HiOutlineFire },
             ]
         },
         {
             title: 'About',
             items: [
-                { id: 'privacy', label: 'Privacy Policy', type: 'link', icon: HiOutlineShieldCheck, path: '/privacy' },
+                { id: 'version', label: 'Version', value: '2.0.0', type: 'simple', icon: HiOutlineInformationCircle },
+                { id: 'privacy', label: 'Privacy Policy', subLabel: 'How we handle your data', type: 'link', icon: HiOutlineShieldCheck, path: '/privacy' },
             ]
         }
     ];
 
-    const [toggles, setToggles] = useState({});
+    const [toggles, setToggles] = useState({
+        'event-reminders': true,
+        'event-start-alerts': true,
+        'event-popups': true,
+    });
 
-    const handleToggle = (id) => {
-        if (id === 'dark-mode') {
-            toggleTheme();
-        } else {
-            setToggles(prev => ({ ...prev, [id]: !prev[id] }));
+    const handleAction = (item) => {
+        if (item.type === 'link' && item.path) {
+            navigate(item.path);
+        } else if (item.type === 'toggle') {
+            if (item.id === 'dark-mode') {
+                setIsDarkMode(!isDarkMode);
+            } else {
+                setToggles(prev => ({ ...prev, [item.id]: !prev[item.id] }));
+            }
+        } else if (item.type === 'value') {
+            if (item.id === 'bg-theme') {
+                setBgTheme(prev => prev === 'space' ? 'minimalistic' : 'space');
+            } else if (item.id === 'font-style') {
+                setFontStyle(prev => prev === 'original' ? 'minimalistic' : 'original');
+            }
         }
     };
 
@@ -110,11 +145,8 @@ const ProfilePage = () => {
                         {section.items.map((item, i) => (
                             <div
                                 key={i}
-                                className={`list-item ${item.type === 'toggle' || item.type === 'link' ? 'clickable' : ''}`}
-                                onClick={() => {
-                                    if (item.type === 'toggle') handleToggle(item.id);
-                                    if (item.type === 'link' && item.path) navigate(item.path);
-                                }}
+                                className={`list-item ${item.type === 'toggle' || item.type === 'link' || item.type === 'value' ? 'clickable' : ''}`}
+                                onClick={() => handleAction(item)}
                             >
                                 <item.icon className="item-icon" />
                                 <div className="item-content">
@@ -125,7 +157,6 @@ const ProfilePage = () => {
 
                                 {item.type === 'value' && (
                                     <div className="item-value-box">
-                                        <span className="item-value">{item.value}</span>
                                         <HiOutlineChevronRight className="arrow-icon" />
                                     </div>
                                 )}
@@ -133,7 +164,7 @@ const ProfilePage = () => {
                                 {item.type === 'link' && <HiOutlineChevronRight className="arrow-icon" />}
 
                                 {item.type === 'toggle' && (
-                                    <div className={`toggle-switch ${item.id === 'dark-mode' ? (isDark ? 'active' : '') : (toggles[item.id] ? 'active' : '')}`}>
+                                    <div className={`toggle-switch ${item.id === 'dark-mode' ? (isDarkMode ? 'active' : '') : (toggles[item.id] ? 'active' : '')}`}>
                                         <div className="toggle-thumb" />
                                     </div>
                                 )}

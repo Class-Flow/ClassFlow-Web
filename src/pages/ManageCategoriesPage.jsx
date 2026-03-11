@@ -2,24 +2,33 @@ import { useState } from 'react';
 import { HiOutlineTag, HiPlus, HiOutlineTrash, HiOutlinePencil } from 'react-icons/hi';
 
 const ManageCategoriesPage = () => {
-    const [categories, setCategories] = useState([
-        { id: 1, name: 'Lectures', color: '#6366f1' },
-        { id: 2, name: 'Assignments', color: '#ec4899' },
-        { id: 3, name: 'Exams', color: '#ef4444' },
-        { id: 4, name: 'Personal', color: '#10b981' }
-    ]);
+    const [categories, setCategories] = useState(() => {
+        const saved = localStorage.getItem('user_categories');
+        if (saved) return JSON.parse(saved);
+        return [
+            { id: 1, name: 'Lectures', color: '#6366f1' },
+            { id: 2, name: 'Assignments', color: '#ec4899' },
+            { id: 3, name: 'Exams', color: '#ef4444' },
+            { id: 4, name: 'Personal', color: '#10b981' }
+        ];
+    });
     const [newCatName, setNewCatName] = useState('');
+
+    const saveCategories = (newCats) => {
+        setCategories(newCats);
+        localStorage.setItem('user_categories', JSON.stringify(newCats));
+    };
 
     const addCategory = (e) => {
         e.preventDefault();
         if (newCatName.trim()) {
-            setCategories([...categories, { id: Date.now(), name: newCatName, color: '#8b5cf6' }]);
+            saveCategories([...categories, { id: Date.now(), name: newCatName, color: '#8b5cf6' }]);
             setNewCatName('');
         }
     };
 
     const deleteCategory = (id) => {
-        setCategories(categories.filter(c => c.id !== id));
+        saveCategories(categories.filter(c => c.id !== id));
     };
 
     return (

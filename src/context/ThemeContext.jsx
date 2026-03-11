@@ -12,35 +12,63 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState(() => {
-        const saved = localStorage.getItem('theme');
-        return saved || 'light';
+    // Determine initial dark mode state (migrating from old 'theme' string if necessary)
+    const [isDarkMode, setIsDarkMode] = useState(() => {
+        const saved = localStorage.getItem('isDarkMode');
+        if (saved !== null) return saved === 'true';
+        const legacy = localStorage.getItem('theme');
+        return legacy === 'dark' || legacy === 'space';
+    });
+
+    const [bgTheme, setBgTheme] = useState(() => {
+        const saved = localStorage.getItem('bgTheme');
+        return saved || 'space';
+    });
+
+    const [fontStyle, setFontStyle] = useState(() => {
+        const saved = localStorage.getItem('fontStyle');
+        return saved || 'original';
     });
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        if (theme === 'space') {
+        // Apply Dark Mode
+        document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+
+        // Apply Background Theme
+        if (bgTheme === 'space') {
             document.body.classList.add('theme-space');
         } else {
             document.body.classList.remove('theme-space');
         }
-        localStorage.setItem('theme', theme);
-    }, [theme]);
 
-    const toggleTheme = () => {
-        setTheme((prev) => {
-            if (prev === 'light') return 'dark';
-            if (prev === 'dark') return 'space';
-            return 'light';
-        });
-    };
+        // Apply Font Style
+        if (fontStyle === 'minimalistic') {
+            document.body.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+            document.body.style.letterSpacing = "0";
+        } else {
+            document.body.style.fontFamily = "'Outfit', sans-serif";
+            document.body.style.letterSpacing = "-0.01em";
+        }
+
+        // Persist values
+        localStorage.setItem('isDarkMode', isDarkMode);
+        localStorage.setItem('bgTheme', bgTheme);
+        localStorage.setItem('fontStyle', fontStyle);
+    }, [isDarkMode, bgTheme, fontStyle]);
+
+    // Legacy support for App.js check
+    const isSpace = bgTheme === 'space';
+    const isDark = isDarkMode;
 
     const value = {
-        theme,
-        setTheme,
-        toggleTheme,
-        isDark: theme === 'dark' || theme === 'space',
-        isSpace: theme === 'space',
+        isDarkMode,
+        setIsDarkMode,
+        bgTheme,
+        setBgTheme,
+        fontStyle,
+        setFontStyle,
+        isDark,
+        isSpace,
     };
 
     return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

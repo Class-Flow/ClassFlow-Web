@@ -91,11 +91,11 @@ const PublicRoute = ({ children }) => {
 };
 
 const ThemedApp = () => {
-  const { theme } = useTheme();
+  const { bgTheme } = useTheme();
   return (
     <>
-      {theme === 'space' && <SpaceBackground />}
-      <div className={`app-container ${theme === 'space' ? 'theme-space' : ''}`}>
+      {bgTheme === 'space' && <SpaceBackground />}
+      <div className={`app-container ${bgTheme === 'space' ? 'theme-space' : ''}`}>
         <main className="main-content">
           <Routes>
             <Route path="/welcome" element={<PublicRoute><WelcomePage /></PublicRoute>} />
