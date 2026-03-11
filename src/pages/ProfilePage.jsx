@@ -43,70 +43,28 @@ const ProfilePage = () => {
 
     const sections = [
         {
-            title: 'Personal Information',
-            items: [
-                { label: 'Name', value: user?.name || 'User', icon: HiOutlineUser },
-                { label: 'Role', value: user?.role || 'Student', icon: HiOutlineAcademicCap },
-                { label: 'Semester', value: 'Spring 2026', icon: HiOutlineCalendar },
-                { label: 'Institution', value: 'University Name', icon: HiOutlineOfficeBuilding },
-            ]
-        },
-        {
             title: 'Appearance',
             items: [
+                { id: 'dark-mode', label: 'Theme Mode', subLabel: `Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`, type: 'toggle', icon: isSpace ? HiOutlineLightningBolt : HiOutlineMoon },
                 { id: 'timeline', label: 'My Timeline', type: 'link', icon: HiOutlineClock, path: '/timeline' },
-                { id: 'dark-mode', label: 'Theme Mode', subLabel: `Current: ${theme.charAt(0).toUpperCase() + theme.slice(1)} (Cycle)`, type: 'toggle', icon: isSpace ? HiOutlineLightningBolt : HiOutlineMoon },
-                { id: 'color-theme', label: 'Color Theme', value: 'Professional', type: 'value', icon: HiOutlineColorSwatch },
-                { id: 'reduced-animations', label: 'Reduced Animations', subLabel: 'Minimize visual effects', type: 'toggle', icon: HiOutlineLightningBolt },
-            ]
-        },
-        {
-            title: 'Security',
-            items: [
-                { id: 'mfa-enabled', label: 'Enable MFA', subLabel: 'Multi-factor authentication via Email OTP', type: 'toggle', icon: HiOutlineShieldCheck }
-            ]
-        },
-        {
-            title: 'Workflow',
-            items: [
-                { id: 'default-view', label: 'Default View', value: 'Home', type: 'value', icon: HiOutlineViewGrid },
-                { id: 'study-mode', label: 'Study Mode', subLabel: 'Minimal interface during focus time', type: 'toggle', icon: HiOutlineFire },
             ]
         },
         {
             title: 'Data & Categories',
             items: [
                 { id: 'organization', label: 'Organization', subLabel: 'University details', type: 'link', icon: HiOutlineOfficeBuilding, path: '/organization' },
-                { id: 'manage-categories', label: 'Manage Categories', subLabel: '5 categories', type: 'link', icon: HiOutlineCollection, path: '/categories' },
-                { id: 'export-data', label: 'Export Data', subLabel: 'Backup your events', type: 'link', icon: HiOutlineDatabase },
-            ]
-        },
-        {
-            title: 'Notifications',
-            items: [
-                { id: 'event-reminders', label: 'Event Reminders', type: 'toggle', icon: HiOutlineBell, defaultActive: true },
-                { id: 'deadline-alerts', label: 'Deadline Alerts', type: 'toggle', icon: HiOutlineClock, defaultActive: true },
-                { id: 'voice-note-notifications', label: 'Voice Note Notifications', type: 'toggle', icon: HiOutlineMicrophone },
+                { id: 'manage-categories', label: 'Manage Categories', subLabel: 'Organize your events', type: 'link', icon: HiOutlineCollection, path: '/categories' },
             ]
         },
         {
             title: 'About',
             items: [
-                { id: 'version', label: 'Version', value: '1.0.0', type: 'simple', icon: HiOutlineInformationCircle },
-                { id: 'help', label: 'Help & Support', type: 'link', icon: HiOutlineQuestionMarkCircle },
                 { id: 'privacy', label: 'Privacy Policy', type: 'link', icon: HiOutlineShieldCheck, path: '/privacy' },
             ]
         }
     ];
 
-    const [toggles, setToggles] = useState({
-        'reduced-animations': false,
-        'study-mode': false,
-        'event-reminders': true,
-        'deadline-alerts': true,
-        'voice-note-notifications': false,
-        'mfa-enabled': user?.settings?.mfaEnabled ?? true
-    });
+    const [toggles, setToggles] = useState({});
 
     const handleToggle = (id) => {
         if (id === 'dark-mode') {
