@@ -8,15 +8,15 @@ import './OtpPage.css';
 
 const OtpPage = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
-    const [hasError, setHasError] = useState(false);
     const [isVerifying, setIsVerifying] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('Invalid code. Please try again.');
+    const [canResend, setCanResend] = useState(false);
+    const [countdown, setCountdown] = useState(30);
     const inputRefs = useRef([]);
     const navigate = useNavigate();
     const location = useLocation();
-    const { verifyMfa } = useAuth();
+    const { verifyMfa, resendMfaOtp } = useAuth();
     
-    // Redirect back to login if no email is passed in state
+    // Email from login navigation
     const email = location.state?.email;
 
     useEffect(() => {
@@ -29,68 +29,88 @@ const OtpPage = () => {
         }
     }, [email, navigate]);
 
-    const verify = async (currentOtp) => {
-        const otpValue = currentOtp.join('');
-        if (otpValue.length < 6) {
-            triggerError('Please enter a 6-digit code.');
-            return;
+    useEffect(() => {
+        let timer;
+        if (!canResend && countdown > 0) {
+            timer = setInterval(() => {
+                setCountdown(prev => prev - 1);
+            }, 1000);
+        } else if (countdown === 0) {
+            setCanResend(true);
         }
+        return () => clearInterval(timer);
+    }, [countdown, canResend]);
+
+    const handleVerify = async (currentOtp) => {
+        const fullOtp = currentOtp.join('');
+        if (fullOtp.length < 6) return;
 
         setIsVerifying(true);
         try {
-            await verifyMfa(email, otpValue);
-            toast.success('Identity verified! Welcome back.');
-            navigate('/');
+            await verifyMfa(email, fullOtp);
+            toast.success('Login successful! Welcome back.');
+            // Navigate is handled in App.jsx via AuthContext/isAuthenticated
         } catch (error) {
             setIsVerifying(false);
-            const msg = error.response?.data?.message || 'Verification failed. Please try again.';
-            triggerError(msg);
+            const msg = error.response?.data?.message || 'Invalid code. Try again.';
+            toast.error(msg);
+            // Reset and focus
+            setOtp(['', '', '', '', '', '']);
+            if (inputRefs.current[0]) inputRefs.current[0].focus();
         }
     };
 
-    const triggerError = (msg) => {
-        if (msg) setErrorMessage(msg);
-        setHasError(true);
-        setTimeout(() => setHasError(false), 800);
-        setOtp(['', '', '', '', '', '']);
-        if (inputRefs.current[0]) inputRefs.current[0].focus();
+    const handleResend = async () => {
+        if (!canResend) return;
+        try {
+            await resendMfaOtp(email);
+            toast.success('MFA Code resent to your email.');
+            setCanResend(false);
+            setCountdown(60); // Resend in 60s next time
+        } catch (error) {
+            toast.error('Failed to resend code');
+        }
     };
 
     const handleChange = (index, value) => {
-        if (value.length > 1) {
-            // Handle paste
-            const pastedData = value.replace(/\D/g, '').slice(0, 6).split('');
-            const newOtp = [...otp];
-            pastedData.forEach((char, i) => {
-                if (index + i < 6) newOtp[index + i] = char;
-            });
-            setOtp(newOtp);
-
-            const nextFocusIndex = Math.min(index + pastedData.length, 5);
-            inputRefs.current[nextFocusIndex].focus();
-
-            if (newOtp.join('').length === 6) verify(newOtp);
-            return;
-        }
-
         if (!/^\d*$/.test(value)) return;
-
+        
         const newOtp = [...otp];
-        newOtp[index] = value;
+        newOtp[index] = value.substring(value.length - 1);
         setOtp(newOtp);
 
-        if (value !== '') {
-            if (index < 5) {
-                inputRefs.current[index + 1].focus();
-            } else {
-                verify(newOtp);
-            }
+        if (value !== '' && index < 5) {
+            inputRefs.current[index + 1].focus();
+        }
+
+        // Auto verify if all fields filled
+        if (newOtp.every(v => v !== '')) {
+            handleVerify(newOtp);
         }
     };
 
     const handleKeyDown = (index, e) => {
         if (e.key === 'Backspace' && otp[index] === '' && index > 0) {
             inputRefs.current[index - 1].focus();
+        }
+    };
+
+    const handlePaste = (e) => {
+        const data = e.clipboardData.getData('text');
+        if (!/^\d+$/.test(data)) return;
+
+        const paste = data.slice(0, 6).split('');
+        const newOtp = [...otp];
+        paste.forEach((char, i) => {
+            if (i < 6) newOtp[i] = char;
+        });
+        setOtp(newOtp);
+        
+        if (newOtp.every(v => v !== '')) {
+            handleVerify(newOtp);
+        } else {
+            const nextIdx = Math.min(paste.length, 5);
+            inputRefs.current[nextIdx].focus();
         }
     };
 
@@ -102,46 +122,48 @@ const OtpPage = () => {
                 <HiOutlineArrowLeft size={24} />
             </button>
 
-            <div className="otp-content">
-                <div className="eyebrow-chip slide-up">VERIFY ACCOUNT</div>
+            <div className="otp-content card frosted-glass fade-in-up">
+                <div className="eyebrow-chip">SECURITY VERIFICATION</div>
 
-                <h1 className="title slide-up delay-1">Confirm Your Identity</h1>
-                <div className="subtitle-box slide-up delay-2">
-                    <p>Enter the 6-digit code sent to your email address to verify this is really you.</p>
-                </div>
+                <h1 className="title">Enter Code</h1>
+                <p className="subtitle">
+                    A code was sent to <strong>{email}</strong>
+                </p>
 
-                <div className={`otp-inputs slide-up delay-3 ${hasError ? 'shake' : ''}`}>
+                <div className="otp-inputs" onPaste={handlePaste}>
                     {otp.map((digit, index) => (
                         <input
                             key={index}
                             ref={el => inputRefs.current[index] = el}
                             type="text"
-                            maxLength={6}
+                            maxLength={1}
                             value={digit}
                             onChange={e => handleChange(index, e.target.value)}
                             onKeyDown={e => handleKeyDown(index, e)}
-                            className={`otp-digit ${hasError ? 'error' : ''}`}
+                            className="otp-digit"
                             disabled={isVerifying}
                         />
                     ))}
                 </div>
 
-                {hasError && (
-                    <div className="error-text fade-in">{errorMessage}</div>
-                )}
-
-                <div className="actions slide-up delay-4">
+                <div className="actions">
                     <button
-                        className="verify-btn"
-                        onClick={() => verify(otp)}
-                        disabled={isVerifying}
+                        className="verify-btn btn-primary"
+                        onClick={() => handleVerify(otp)}
+                        disabled={isVerifying || otp.some(v => v === '')}
                     >
-                        {isVerifying ? <div className="spinner" /> : 'Verify Code'}
+                        {isVerifying ? <div className="spinner-inline" /> : 'Confirm Login'}
                     </button>
 
-                    <button className="cancel-btn" onClick={() => navigate('/auth')}>
-                        Cancel and Go Back
-                    </button>
+                    <div className="resend-section">
+                        {canResend ? (
+                            <button className="text-btn" onClick={handleResend}>
+                                Resend Code
+                            </button>
+                        ) : (
+                            <span className="timer-text">Resend in {countdown}s</span>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
@@ -149,3 +171,4 @@ const OtpPage = () => {
 };
 
 export default OtpPage;
+

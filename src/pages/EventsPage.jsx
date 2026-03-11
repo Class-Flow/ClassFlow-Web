@@ -14,6 +14,7 @@ import {
 import './EventsPage.css';
 import AddEventModal from '../components/AddEventModal';
 import EventDetailsModal from '../components/EventDetailsModal';
+import GamificationPopup from '../components/GamificationPopup';
 import { eventService } from '../services/eventService';
 import { attendanceService } from '../services/attendanceService';
 import { toast } from 'react-toastify';
@@ -28,6 +29,9 @@ const EventsPage = () => {
     // Details Modal State
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+    // Gamification state
+    const [gamiState, setGamiState] = useState({ isOpen: false });
 
     useEffect(() => {
         fetchEvents();
@@ -71,21 +75,38 @@ const EventsPage = () => {
 
     const handleAttendance = async (event, status) => {
         try {
-            const record = {
-                courseName: event.title,
-                status: status, // 'present', 'absent', 'cancelled'
-                date: new Date(event.startTime).toISOString()
-            };
-
-            const response = await attendanceService.markAttendance(record);
-            if (response.success) {
-                toast.success(`Marked as ${status}`);
-                // Optional: Update local state to show it's marked
-                // For now, simpler to just show toast
+            // First mark attendance in the specific attendance module for classes
+            if (event.type === 'class') {
+                await attendanceService.markAttendance({
+                    courseName: event.title,
+                    status: status,
+                    date: new Date(event.startTime).toISOString()
+                });
             }
+
+            // Then mark status in the events module for gamification
+            const response = await eventService.markStatus(event._id, status);
+            if (response.success && response.data) {
+                // Refresh list
+                fetchEvents();
+                // Check Gamification
+                const { pointChange, newRank, isPromotion, rankChanged } = response.data.gamification || {};
+                
+                setGamiState({
+                    isOpen: true,
+                    eventTitle: event.title,
+                    statusType: status,
+                    pointChange: pointChange || 0,
+                    newRank: newRank || 'Neptune',
+                    isPromotion: !!isPromotion,
+                    isDemotion: !!(rankChanged && !isPromotion)
+                });
+                setIsDetailsOpen(false);
+            }
+
         } catch (error) {
-            console.error("Failed to mark attendance", error);
-            toast.error("Failed to mark attendance");
+            console.error("Failed to mark status", error);
+            toast.error("Failed to mark status");
         }
     };
 
@@ -215,6 +236,12 @@ const EventsPage = () => {
                 isOpen={isDetailsOpen}
                 onClose={() => setIsDetailsOpen(false)}
                 event={selectedEvent}
+                onMarkStatus={handleAttendance}
+            />
+
+            <GamificationPopup
+                {...gamiState}
+                onClose={() => setGamiState({ isOpen: false })}
             />
         </div>
     );

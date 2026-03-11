@@ -105,7 +105,7 @@ const ProfilePage = () => {
             if (item.id === 'dark-mode') {
                 setIsDarkMode(!isDarkMode);
             } else if (item.id === 'mfa-enabled') {
-                const currentMfa = user?.settings?.mfaEnabled ?? true;
+                const currentMfa = user?.settings?.mfaEnabled ?? false;
                 const updatedSettings = { ...user?.settings, mfaEnabled: !currentMfa };
                 try {
                     await updateUser({ settings: updatedSettings });
@@ -182,7 +182,7 @@ const ProfilePage = () => {
                                 {item.type === 'toggle' && (
                                     <div className={`toggle-switch ${
                                         item.id === 'dark-mode' ? (isDarkMode ? 'active' : '') 
-                                        : item.id === 'mfa-enabled' ? ((user?.settings?.mfaEnabled ?? true) ? 'active' : '') 
+                                        : item.id === 'mfa-enabled' ? ((user?.settings?.mfaEnabled ?? false) ? 'active' : '') 
                                         : (toggles[item.id] ? 'active' : '')
                                     }`}>
                                         <div className="toggle-thumb" />

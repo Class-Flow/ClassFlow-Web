@@ -56,6 +56,15 @@ export const eventService = {
         };
     },
 
+    // Mark attendance status
+    markStatus: async (id, status) => {
+        const response = await api.put(`/events/${id}/status`, { status });
+        return {
+            success: true,
+            data: response.data
+        };
+    },
+
     // Toggle completion (Helper that just calls update)
     toggleComplete: async (id, currentStatus) => {
         // We need the current event first or just send the toggle.

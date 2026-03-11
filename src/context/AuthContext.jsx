@@ -90,11 +90,17 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const resendMfaOtp = async (email) => {
+        const data = await authService.resendMfaOtp(email);
+        return data;
+    };
+
     const value = {
         user,
         loading,
         login,
         verifyMfa,
+        resendMfaOtp,
         register,
         logout,
         googleLogin,

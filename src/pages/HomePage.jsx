@@ -22,8 +22,8 @@ import {
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import AddEventModal from '../components/AddEventModal';
-import EventDetailsModal from '../components/EventDetailsModal';
 import AnimatedAvatar from '../components/AnimatedAvatar';
+import GamificationPopup from '../components/GamificationPopup';
 import { eventService } from '../services/eventService';
 import { aiService } from '../services/aiService';
 
@@ -44,6 +44,9 @@ const HomePage = () => {
     const [burnoutAlert, setBurnoutAlert] = useState(null);
     const [dismissedAlerts, setDismissedAlerts] = useState({});
     const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+
+    // Gamification state
+    const [gamiState, setGamiState] = useState({ isOpen: false });
 
     useEffect(() => {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
@@ -170,6 +173,29 @@ const HomePage = () => {
     const openCreateModal = (type = 'class') => {
         setModalType(type);
         setIsModalOpen(true);
+    };
+
+    const handleMarkStatus = async (event, status) => {
+        try {
+            const response = await eventService.markStatus(event._id, status);
+            if (response.success && response.data) {
+                fetchStats();
+                const { pointChange, newRank, isPromotion } = response.data.gamification || {};
+                setGamiState({
+                    isOpen: true,
+                    eventTitle: event.title,
+                    statusType: status,
+                    pointChange: pointChange || 0,
+                    newRank: newRank || 'Neptune',
+                    isPromotion: !!isPromotion,
+                    isDemotion: (pointChange < 0 && newRank !== user?.gamification?.rank) // rough heuristic
+                });
+                setIsDetailsOpen(false);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to mark status');
+        }
     };
 
     return (
@@ -388,6 +414,12 @@ const HomePage = () => {
                 isOpen={isDetailsOpen}
                 onClose={() => setIsDetailsOpen(false)}
                 event={selectedEvent}
+                onMarkStatus={handleMarkStatus}
+            />
+
+            <GamificationPopup
+                {...gamiState}
+                onClose={() => setGamiState({ isOpen: false })}
             />
         </div>
     );

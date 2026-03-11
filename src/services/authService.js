@@ -87,4 +87,10 @@ export const authService = {
         const response = await api.post('/auth/reset-password', { email, otp, newPassword });
         return response.data;
     },
+
+    // Resend MFA OTP
+    resendMfaOtp: async (email) => {
+        const response = await api.post('/auth/resend-mfa-otp', { email });
+        return response.data;
+    },
 };

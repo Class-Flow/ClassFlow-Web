@@ -31,189 +31,167 @@
 }
 
 .otp-content {
-    padding: 0 26px;
+    padding: 40px 24px;
     z-index: 2;
-    max-width: 500px;
+    max-width: 440px;
     margin: 0 auto;
-    width: 100%;
+    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 28px;
+}
+
+.frosted-glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .eyebrow-chip {
-    display: inline-block;
-    padding: 7px 16px;
-    border: 1px solid rgba(0, 217, 255, 0.35);
-    background: rgba(0, 217, 255, 0.07);
-    border-radius: 24px;
-    color: rgba(0, 217, 255, 0.85);
-    font-size: 11px;
-    letter-spacing: 2.8px;
-    font-weight: 700;
+    padding: 6px 14px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 100px;
+    color: #00D9FF;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
     margin-bottom: 24px;
+    text-transform: uppercase;
 }
 
 .title {
-    font-size: 42px;
-    font-weight: 900;
-    margin: 0 0 16px 0;
-    text-align: center;
-    line-height: 1.15;
-    letter-spacing: 0.4px;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: white;
 }
 
-.subtitle-box {
-    background: rgba(0, 0, 0, 0.25);
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 48px;
+.subtitle {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
+    margin-bottom: 40px;
+    line-height: 1.5;
 }
 
-.subtitle-box p {
-    margin: 0;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.7;
-    letter-spacing: 0.15px;
+.subtitle strong {
+    color: white;
 }
 
 .otp-inputs {
     display: flex;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 32px;
 }
 
 .otp-digit {
     width: 50px;
-    height: 64px;
-    font-size: 28px;
-    font-weight: 800;
-    text-align: center;
-    border-radius: 12px;
+    height: 60px;
+    border-radius: 14px;
     background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(0, 217, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     color: white;
-    font-family: monospace;
-    transition: all 0.2s;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .otp-digit:focus {
     outline: none;
     border-color: #00D9FF;
-    border-width: 2.5px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.otp-digit.error {
-    border-color: #FF6B6B;
-    background: rgba(255, 107, 107, 0.08);
-    color: #FF6B6B;
-}
-
-.error-text {
-    color: #FF6B6B;
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 32px;
+    background: rgba(0, 217, 255, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 217, 255, 0.2);
 }
 
 .actions {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-top: 32px;
+    align-items: center;
+    gap: 20px;
 }
 
 .verify-btn {
     width: 100%;
-    padding: 18px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #00D9FF, #06D6D6);
-    color: #040D18;
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: 0.4px;
+    padding: 16px;
+    border-radius: 14px;
     border: none;
+    background: #00D9FF;
+    color: #040D18;
+    font-size: 16px;
+    font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 8px 24px rgba(0, 217, 255, 0.25);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 10px 20px -5px rgba(0, 217, 255, 0.4);
 }
 
-.verify-btn:not(:disabled):hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(0, 217, 255, 0.35);
+.verify-btn:hover:not(:disabled) {
+    transform: scale(1.02);
+    box-shadow: 0 15px 25px -5px rgba(0, 217, 255, 0.5);
 }
 
 .verify-btn:disabled {
-    opacity: 0.8;
+    opacity: 0.5;
     cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
 }
 
-.cancel-btn {
-    width: 100%;
-    padding: 16px;
-    border-radius: 12px;
-    background: rgba(0, 217, 255, 0.05);
-    border: 1.2px solid rgba(0, 217, 255, 0.38);
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 15px;
+.resend-section {
+    font-size: 14px;
+}
+
+.timer-text {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.text-btn {
+    background: none;
+    border: none;
+    color: #00D9FF;
     font-weight: 700;
-    letter-spacing: 0.3px;
     cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 8px;
     transition: background 0.2s;
 }
 
-.cancel-btn:hover {
-    background: rgba(0, 217, 255, 0.15);
+.text-btn:hover {
+    background: rgba(0, 217, 255, 0.1);
 }
 
-.spinner {
+.spinner-inline {
     width: 20px;
     height: 20px;
-    border: 2.5px solid rgba(4, 13, 24, 0.2);
-    border-top-color: rgba(4, 13, 24, 0.85);
+    border: 3px solid rgba(4, 13, 24, 0.3);
+    border-top-color: #040D18;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
 }
 
 @keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
-/* Animations */
-.shake {
-    animation: shake 0.4s cubic-bezier(.36, .07, .19, .97) both;
+.fade-in-up {
+    animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes shake {
-
-    10%,
-    90% {
-        transform: translate3d(-1px, 0, 0);
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
     }
-
-    20%,
-    80% {
-        transform: translate3d(2px, 0, 0);
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-
-    30%,
-    50%,
-    70% {
-        transform: translate3d(-4px, 0, 0);
-    }
-
-    40%,
-    60% {
-        transform: translate3d(4px, 0, 0);
-    }
-}
+}

@@ -13,7 +13,7 @@ import {
 } from 'react-icons/hi';
 import './EventDetailsModal.css';
 
-const EventDetailsModal = ({ isOpen, onClose, event }) => {
+const EventDetailsModal = ({ isOpen, onClose, event, onMarkStatus }) => {
     if (!isOpen || !event) return null;
 
     const classifications = [
@@ -105,6 +105,40 @@ const EventDetailsModal = ({ isOpen, onClose, event }) => {
                                 <div className="detail-text">
                                     <span className="label">Notes</span>
                                     <p className="notes-text">{event.notes}</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {onMarkStatus && (
+                            <div className="detail-item full-width">
+                                <div className="detail-icon">
+                                    <HiOutlineAcademicCap />
+                                </div>
+                                <div className="detail-text">
+                                    <span className="label">Event Status</span>
+                                    <div className="attendance-actions" style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+                                        <button
+                                            className={`btn-attend present ${event.attendanceStatus === 'present' ? 'active' : ''}`}
+                                            onClick={() => onMarkStatus(event, 'present')}
+                                        >
+                                            Present
+                                        </button>
+                                        <button
+                                            className={`btn-attend absent ${event.attendanceStatus === 'absent' ? 'active' : ''}`}
+                                            onClick={() => onMarkStatus(event, 'absent')}
+                                        >
+                                            Absent
+                                        </button>
+                                        <button
+                                            className={`btn-attend cancelled ${event.attendanceStatus === 'cancelled' ? 'active' : ''}`}
+                                            onClick={() => onMarkStatus(event, 'cancelled')}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                    <p style={{fontSize: '12px', color: 'var(--text-tertiary)', marginTop: '8px'}}>
+                                        Current Status: <strong style={{textTransform: 'capitalize'}}>{event.attendanceStatus || 'Upcoming'}</strong>
+                                    </p>
                                 </div>
                             </div>
                         )}

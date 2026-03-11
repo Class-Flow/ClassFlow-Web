@@ -5,6 +5,8 @@ import { HiPlus, HiOutlineViewGrid, HiOutlineCalendar } from 'react-icons/hi';
 import './CalendarPage.css';
 import AddEventModal from '../components/AddEventModal';
 import EventDetailsModal from '../components/EventDetailsModal';
+import GamificationPopup from '../components/GamificationPopup';
+import { toast } from 'react-toastify';
 
 import { eventService } from '../services/eventService';
 import { useEffect } from 'react';
@@ -16,6 +18,9 @@ const CalendarPage = () => {
     const [loading, setLoading] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+    // Gamification state
+    const [gamiState, setGamiState] = useState({ isOpen: false });
 
     const fetchEvents = useCallback(async () => {
         setLoading(true);
@@ -30,6 +35,29 @@ const CalendarPage = () => {
             setLoading(false);
         }
     }, [date]);
+
+    const handleMarkStatus = async (event, status) => {
+        try {
+            const response = await eventService.markStatus(event._id, status);
+            if (response.success && response.data) {
+                fetchEvents();
+                const { pointChange, newRank, isPromotion, rankChanged } = response.data.gamification || {};
+                setGamiState({
+                    isOpen: true,
+                    eventTitle: event.title,
+                    statusType: status,
+                    pointChange: pointChange || 0,
+                    newRank: newRank || 'Neptune',
+                    isPromotion: !!isPromotion,
+                    isDemotion: !!(rankChanged && !isPromotion)
+                });
+                setIsDetailsOpen(false);
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Failed to mark status');
+        }
+    };
 
     useEffect(() => {
         fetchEvents();
@@ -129,6 +157,12 @@ const CalendarPage = () => {
                 isOpen={isDetailsOpen}
                 onClose={() => setIsDetailsOpen(false)}
                 event={selectedEvent}
+                onMarkStatus={handleMarkStatus}
+            />
+
+            <GamificationPopup
+                {...gamiState}
+                onClose={() => setGamiState({ isOpen: false })}
             />
         </div>
     );

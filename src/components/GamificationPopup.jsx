@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './GamificationPopup.css';
 
-const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType }) => {
-    const [stats, setStats] = useState({ successful: 12, unsuccessful: 2 }); // Mock stats
+const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType, pointChange, newRank, isPromotion, isDemotion }) => {
     const [animState, setAnimState] = useState('entering');
 
     useEffect(() => {
@@ -13,7 +12,7 @@ const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType }) => {
             const timer2 = setTimeout(() => {
                 setAnimState('exiting');
                 setTimeout(onClose, 400); // Wait for exit animation
-            }, 4000); // Auto close after 4 sec
+            }, 6000); // Auto close after 6 sec
 
             return () => {
                 clearTimeout(timer1);
@@ -25,23 +24,27 @@ const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType }) => {
     if (!isOpen) return null;
 
     const getConfig = () => {
+        if (isPromotion) {
+            return { color: 'var(--success-green)', emoji: '🚀', title: 'PROMOTION!', msg: `You reached Rank: ${newRank}! Incredible work! 🌟` };
+        }
+        if (isDemotion) {
+            return { color: 'var(--error-red)', emoji: '📉', title: 'RANK DROP', msg: `You fell to Rank: ${newRank}. You can bounce back! 💪` };
+        }
+
         switch (statusType) {
-            case 'completed':
-                return { color: 'var(--success-green)', emoji: '🎉', title: 'LOCKED IN!', msg: 'You absolutely crushed it! Keep that momentum going! 🔥' };
             case 'present':
-                return { color: 'var(--primary-blue)', emoji: '⭐', title: 'PERFECT!', msg: "Perfect attendance! You're on fire! Let's keep it up!" };
-            case 'missed':
-                return { color: 'var(--error-red)', emoji: '😞', title: 'MISSED', msg: "Next time you got this! Don't give up! 💪" };
+                return { color: 'var(--primary-blue)', emoji: '⭐', title: 'PRESENT!', msg: "Marked present! You're on fire! 🔥" };
             case 'absent':
-                return { color: 'var(--warning-amber)', emoji: '😴', title: 'ABSENT', msg: 'Make sure to catch the next one! You can do it!' };
+                return { color: 'var(--warning-amber)', emoji: '🥱', title: 'ABSENT', msg: 'Missed! Make sure to catch the next one! ⚠️' };
             case 'cancelled':
-                return { color: 'var(--secondary-purple)', emoji: 'ℹ️', title: 'CANCELLED', msg: 'Event was cancelled - no worries at all!' };
+                return { color: 'var(--secondary-purple)', emoji: 'ℹ️', title: 'CANCELLED', msg: 'Event cancelled - no penalty applied.' };
             default:
-                return { color: 'var(--primary-blue)', emoji: '✓', title: 'MARKED', msg: 'Event status recorded!' };
+                return { color: 'var(--primary-blue)', emoji: '✓', title: 'MARKED', msg: 'Status recorded!' };
         }
     };
 
     const config = getConfig();
+    const isPositive = pointChange >= 0;
 
     return (
         <div className="gamification-overlay">
@@ -49,7 +52,7 @@ const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType }) => {
             <div className="particles-layer">
                 {[10, 20, 30].map((val, i) => (
                     <div key={i} className="floating-particle" style={{ animationDelay: `${i * 0.3}s`, backgroundColor: config.color }}>
-                        +{val}
+                        {isPositive ? '+' : ''}{pointChange || 0}
                     </div>
                 ))}
             </div>
@@ -73,21 +76,13 @@ const GamificationPopup = ({ isOpen, onClose, eventTitle, statusType }) => {
                 <p className="gami-msg">{config.msg}</p>
 
                 <div className="gami-stats">
-                    <p className="gami-stats-title">TODAY'S PROGRESS</p>
-                    <div className="gami-stats-row">
-                        <div className="gami-stat-box success-box">
+                    <div className="gami-stats-row" style={{justifyContent: 'center'}}>
+                        <div className={`gami-stat-box ${isPositive ? 'success-box' : 'error-box'}`} style={{width: '100%'}}>
                             <div className="stat-icon-wrapper">
-                                <span className="stat-icon">✓</span>
+                                <span className="stat-icon">{isPositive ? '↑' : '↓'}</span>
                             </div>
-                            <h3>{stats.successful}</h3>
-                            <span>Completed</span>
-                        </div>
-                        <div className="gami-stat-box error-box">
-                            <div className="stat-icon-wrapper">
-                                <span className="stat-icon">✕</span>
-                            </div>
-                            <h3>{stats.unsuccessful}</h3>
-                            <span>Missed</span>
+                            <h3>{isPositive ? '+' : ''}{pointChange || 0}</h3>
+                            <span>Points</span>
                         </div>
                     </div>
                 </div>
