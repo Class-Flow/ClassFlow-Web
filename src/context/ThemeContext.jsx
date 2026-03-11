@@ -46,8 +46,14 @@ export const ThemeProvider = ({ children }) => {
             document.body.style.fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
             document.body.style.letterSpacing = "0";
         } else {
-            document.body.style.fontFamily = "'Outfit', sans-serif";
-            document.body.style.letterSpacing = "-0.01em";
+            // Original font Style mapping
+            if (bgTheme === 'space') {
+                document.body.style.fontFamily = "'Orbitron', sans-serif";
+                document.body.style.letterSpacing = "0.02em";
+            } else {
+                document.body.style.fontFamily = "'Outfit', sans-serif";
+                document.body.style.letterSpacing = "-0.01em";
+            }
         }
 
         // Persist values
