@@ -24,29 +24,17 @@ const AuthPage = () => {
         avatar: ''
     });
 
-    const [mfaStep, setMfaStep] = useState(false);
-    const [loginEmail, setLoginEmail] = useState('');
-    const [otp, setOtp] = useState('');
-
-    const { login, verifyMfa, register, googleLogin } = useAuth();
+    const { login, register, googleLogin } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            if (mfaStep) {
-                // Submit MFA OTP
-                await verifyMfa(loginEmail, otp);
-                toast.success('Welcome back!');
-                return;
-            }
-
             if (isLogin) {
                 const response = await login({ email: formData.email, password: formData.password });
                 if (response.requiresMfa) {
                     toast.success(response.message || 'MFA Code sent to your email.');
-                    setLoginEmail(formData.email);
-                    setMfaStep(true);
+                    navigate('/otp', { state: { email: formData.email } });
                 } else {
                     toast.success('Welcome back!');
                 }
@@ -127,112 +115,89 @@ const AuthPage = () => {
                 </div>
 
                 <div className="auth-header-web">
-                    <h1>{mfaStep ? 'Two-Factor Authentication' : isLogin ? 'Welcome Back' : 'Create Account'}</h1>
-                    <p>{mfaStep ? 'Enter the code sent to your email' : isLogin ? 'Sign in to continue' : 'Join our community today'}</p>
+                    <h1>{isLogin ? 'Welcome Back' : 'Create Account'}</h1>
+                    <p>{isLogin ? 'Sign in to continue' : 'Join our community today'}</p>
                 </div>
 
-                {mfaStep ? (
-                    <form className="auth-form-web" onSubmit={handleSubmit}>
-                         <div className="input-group-web">
-                            <HiOutlineLockClosed className="input-icon" />
-                            <input
-                                type="text"
-                                placeholder="6-digit OTP"
-                                value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <button type="submit" className="btn-filled-auth" disabled={loading}>
-                            {loading ? 'Verifying...' : 'Verify & Sign In'}
-                        </button>
-                        <button type="button" className="auth-footer-web toggle-btn-web" style={{marginTop: 16}} onClick={() => setMfaStep(false)}>
-                            Cancel
-                        </button>
-                    </form>
-                ) : (
-                    <form className="auth-form-web" onSubmit={handleSubmit}>
-                        {!isLogin && (
-                            <div className="signup-grid">
-                                <div className="input-group-web">
-                                    <HiOutlineUser className="input-icon" />
-                                    <input
-                                        type="text"
-                                        placeholder="First Name"
-                                        value={formData.firstName}
-                                        onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group-web">
-                                    <HiOutlineUser className="input-icon" />
-                                    <input
-                                        type="text"
-                                        placeholder="Last Name"
-                                        value={formData.lastName}
-                                        onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="input-group-web select-group-web" style={{ gridColumn: '1 / -1' }}>
-                                    <HiOutlineAcademicCap className="input-icon" />
-                                    <select 
-                                        value={formData.role} 
-                                        onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                                    >
-                                        <option value="student">Student</option>
-                                        <option value="teacher">Teacher</option>
-                                        <option value="admin">Admin</option>
-                                    </select>
-                                </div>
+                <form className="auth-form-web" onSubmit={handleSubmit}>
+                    {!isLogin && (
+                        <div className="signup-grid">
+                            <div className="input-group-web">
+                                <HiOutlineUser className="input-icon" />
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={formData.firstName}
+                                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                                    required
+                                />
                             </div>
-                        )}
-
-                        <div className="input-group-web">
-                            <HiOutlineMail className="input-icon" />
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                required
-                            />
+                            <div className="input-group-web">
+                                <HiOutlineUser className="input-icon" />
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={formData.lastName}
+                                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group-web select-group-web" style={{ gridColumn: '1 / -1' }}>
+                                <HiOutlineAcademicCap className="input-icon" />
+                                <select 
+                                    value={formData.role} 
+                                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                                >
+                                    <option value="student">Student</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
                         </div>
+                    )}
 
-                        <div className="input-group-web">
-                            <HiOutlineLockClosed className="input-icon" />
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Password"
-                                value={formData.password}
-                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                required
-                            />
-                            <button
-                                type="button"
-                                className="toggle-eye"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <HiEyeOff /> : <HiEye />}
-                            </button>
-                        </div>
+                    <div className="input-group-web">
+                        <HiOutlineMail className="input-icon" />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            required
+                        />
+                    </div>
 
-                        {isLogin && <div className="forgot-password-web" onClick={() => navigate('/forgot-password')}>Forgot Password?</div>}
-
-                        <button type="submit" className="btn-filled-auth" disabled={loading}>
-                            {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
-                        </button>
-                    </form>
-                )}
-
-                {!mfaStep && (
-                    <div className="auth-footer-web">
-                        <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
-                        <button className="toggle-btn-web" onClick={() => setIsLogin(!isLogin)}>
-                            {isLogin ? 'Sign Up' : 'Sign In'}
+                    <div className="input-group-web">
+                        <HiOutlineLockClosed className="input-icon" />
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            required
+                        />
+                        <button
+                            type="button"
+                            className="toggle-eye"
+                            onClick={() => setShowPassword(!showPassword)}
+                        >
+                            {showPassword ? <HiEyeOff /> : <HiEye />}
                         </button>
                     </div>
-                )}
+
+                    {isLogin && <div className="forgot-password-web" onClick={() => navigate('/forgot-password')}>Forgot Password?</div>}
+
+                    <button type="submit" className="btn-filled-auth" disabled={loading}>
+                        {loading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
+                    </button>
+                </form>
+
+                <div className="auth-footer-web">
+                    <span>{isLogin ? "Don't have an account?" : "Already have an account?"}</span>
+                    <button className="toggle-btn-web" onClick={() => setIsLogin(!isLogin)}>
+                        {isLogin ? 'Sign Up' : 'Sign In'}
+                    </button>
+                </div>
 
                 <div className="divider-web">
                     <div className="line" />

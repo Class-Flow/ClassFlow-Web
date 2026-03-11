@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 import SpaceBackground from '../components/SpaceBackground';
 import { HiOutlineArrowLeft } from 'react-icons/hi';
 import './OtpPage.css';
@@ -8,41 +10,50 @@ const OtpPage = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [hasError, setHasError] = useState(false);
     const [isVerifying, setIsVerifying] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('Invalid code. Please try again.');
     const inputRefs = useRef([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const { verifyMfa } = useAuth();
+    
+    // Redirect back to login if no email is passed in state
+    const email = location.state?.email;
 
     useEffect(() => {
+        if (!email) {
+            navigate('/auth');
+            return;
+        }
         if (inputRefs.current[0]) {
             inputRefs.current[0].focus();
         }
-    }, []);
+    }, [email, navigate]);
 
     const verify = async (currentOtp) => {
         const otpValue = currentOtp.join('');
         if (otpValue.length < 6) {
-            triggerError();
+            triggerError('Please enter a 6-digit code.');
             return;
         }
 
         setIsVerifying(true);
-        // Simulate network delay
-        await new Promise(resolve => setTimeout(resolve, 800));
-
-        // For now, any 6-digit code passes
-        if (/^\d{6}$/.test(otpValue)) {
-            // Success - navigate to home
+        try {
+            await verifyMfa(email, otpValue);
+            toast.success('Identity verified! Welcome back.');
             navigate('/');
-        } else {
+        } catch (error) {
             setIsVerifying(false);
-            triggerError();
+            const msg = error.response?.data?.message || 'Verification failed. Please try again.';
+            triggerError(msg);
         }
     };
 
-    const triggerError = () => {
+    const triggerError = (msg) => {
+        if (msg) setErrorMessage(msg);
         setHasError(true);
         setTimeout(() => setHasError(false), 800);
         setOtp(['', '', '', '', '', '']);
-        inputRefs.current[0].focus();
+        if (inputRefs.current[0]) inputRefs.current[0].focus();
     };
 
     const handleChange = (index, value) => {
@@ -116,7 +127,7 @@ const OtpPage = () => {
                 </div>
 
                 {hasError && (
-                    <div className="error-text fade-in">Invalid code. Please try again.</div>
+                    <div className="error-text fade-in">{errorMessage}</div>
                 )}
 
                 <div className="actions slide-up delay-4">
