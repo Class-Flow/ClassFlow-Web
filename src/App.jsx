@@ -24,7 +24,6 @@ import ManageCategoriesPage from './pages/ManageCategoriesPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import WelcomePage from './pages/WelcomePage';
 import OnboardingPage from './pages/OnboardingPage';
-import OtpPage from './pages/OtpPage';
 import ReadyPage from './pages/ReadyPage';
 import OrganizationProPage from './pages/OrganizationProPage';
 
@@ -103,7 +102,6 @@ const ThemedApp = () => {
             <Route path="/org-pro" element={<PublicRoute><OrganizationProPage /></PublicRoute>} />
             <Route path="/onboarding" element={<PublicRoute><OnboardingPage /></PublicRoute>} />
             <Route path="/auth" element={<PublicRoute><AuthPage /></PublicRoute>} />
-            <Route path="/otp" element={<PublicRoute><OtpPage /></PublicRoute>} />
             <Route path="/forgot-password" element={<PublicRoute><ForgotPasswordPage /></PublicRoute>} />
             <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
             <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />

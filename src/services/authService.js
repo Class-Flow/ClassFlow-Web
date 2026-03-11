@@ -17,15 +17,6 @@ export const authService = {
         return response.data;
     },
 
-    // Verify MFA login OTP
-    verifyMfa: async (email, otp) => {
-        const response = await api.post('/auth/verify-login-otp', { email, otp });
-        if (response.data.token) {
-            sessionStorage.setItem('token', response.data.token);
-            sessionStorage.setItem('user', JSON.stringify(response.data.user));
-        }
-        return response.data;
-    },
 
     // Logout user
     logout: () => {
@@ -85,12 +76,6 @@ export const authService = {
     // Reset Password - verify OTP and set new password
     resetPassword: async (email, otp, newPassword) => {
         const response = await api.post('/auth/reset-password', { email, otp, newPassword });
-        return response.data;
-    },
-
-    // Resend MFA OTP
-    resendMfaOtp: async (email) => {
-        const response = await api.post('/auth/resend-mfa-otp', { email });
         return response.data;
     },
 };

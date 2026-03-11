@@ -53,13 +53,6 @@ export const AuthProvider = ({ children }) => {
         return data;
     };
 
-    const verifyMfa = async (email, otp) => {
-        const data = await authService.verifyMfa(email, otp);
-        if (data.user) {
-            setUser(data.user);
-        }
-        return data;
-    };
 
     const register = async (userData) => {
         const data = await authService.register(userData);
@@ -90,17 +83,11 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const resendMfaOtp = async (email) => {
-        const data = await authService.resendMfaOtp(email);
-        return data;
-    };
 
     const value = {
         user,
         loading,
         login,
-        verifyMfa,
-        resendMfaOtp,
         register,
         logout,
         googleLogin,

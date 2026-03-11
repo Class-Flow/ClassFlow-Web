@@ -31,13 +31,8 @@ const AuthPage = () => {
         setLoading(true);
         try {
             if (isLogin) {
-                const response = await login({ email: formData.email, password: formData.password });
-                if (response.requiresMfa) {
-                    toast.success(response.message || 'MFA Code sent to your email.');
-                    navigate('/otp', { state: { email: formData.email } });
-                } else {
-                    toast.success('Welcome back!');
-                }
+                await login({ email: formData.email, password: formData.password });
+                toast.success('Welcome back!');
             } else {
                 await register(formData);
                 toast.success('Account created successfully! Please sign in.');

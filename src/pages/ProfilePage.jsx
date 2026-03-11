@@ -78,12 +78,6 @@ const ProfilePage = () => {
             ]
         },
         {
-            title: 'Security',
-            items: [
-                { id: 'mfa-enabled', label: 'Enable MFA', subLabel: 'Require OTP on login', type: 'toggle', icon: HiOutlineShieldCheck },
-            ]
-        },
-        {
             title: 'About',
             items: [
                 { id: 'version', label: 'Version', value: '2.0.0', type: 'simple', icon: HiOutlineInformationCircle },
@@ -104,15 +98,6 @@ const ProfilePage = () => {
         } else if (item.type === 'toggle') {
             if (item.id === 'dark-mode') {
                 setIsDarkMode(!isDarkMode);
-            } else if (item.id === 'mfa-enabled') {
-                const currentMfa = user?.settings?.mfaEnabled ?? false;
-                const updatedSettings = { ...user?.settings, mfaEnabled: !currentMfa };
-                try {
-                    await updateUser({ settings: updatedSettings });
-                    toast.success(updatedSettings.mfaEnabled ? 'MFA Enabled' : 'MFA Disabled');
-                } catch (e) {
-                    toast.error('Failed to update MFA settings');
-                }
             } else {
                 setToggles(prev => ({ ...prev, [item.id]: !prev[item.id] }));
             }
@@ -182,7 +167,6 @@ const ProfilePage = () => {
                                 {item.type === 'toggle' && (
                                     <div className={`toggle-switch ${
                                         item.id === 'dark-mode' ? (isDarkMode ? 'active' : '') 
-                                        : item.id === 'mfa-enabled' ? ((user?.settings?.mfaEnabled ?? false) ? 'active' : '') 
                                         : (toggles[item.id] ? 'active' : '')
                                     }`}>
                                         <div className="toggle-thumb" />
