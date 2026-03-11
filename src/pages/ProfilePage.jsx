@@ -205,8 +205,8 @@ const ProfilePage = () => {
 
             {/* Avatar Customizer Modal */}
             {isAvatarModalOpen && (
-                <div className="modal-overlay" onClick={() => setIsAvatarModalOpen(false)}>
-                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none' }}>
+                <div className="modal-overlay" onClick={() => setIsAvatarModalOpen(false)} style={{ alignItems: 'flex-start', paddingTop: '80px', overflowY: 'auto' }}>
+                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ padding: 0, background: 'transparent', border: 'none', boxShadow: 'none', width: '100%', maxWidth: '500px' }}>
                         <AvatarCustomizer
                             initialAvatar={user?.avatar}
                             onCancel={() => setIsAvatarModalOpen(false)}
@@ -224,8 +224,8 @@ const ProfilePage = () => {
             )}
             {/* Avatar View Modal */}
             {isAvatarViewOpen && (
-                <div className="modal-overlay" onClick={() => setIsAvatarViewOpen(false)}>
-                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ background: 'transparent', border: 'none', boxShadow: 'none', display: 'flex', justifyContent: 'center' }}>
+                <div className="modal-overlay" onClick={() => setIsAvatarViewOpen(false)} style={{ alignItems: 'flex-start', paddingTop: '80px', overflowY: 'auto' }}>
+                    <div className="modal-content slide-down-content" onClick={e => e.stopPropagation()} style={{ background: 'transparent', border: 'none', boxShadow: 'none', display: 'flex', justifyContent: 'center', width: '100%' }}>
                         <div className="avatar-view-box">
                             <h3 style={{color: 'var(--text-primary)', margin: 0}}>Avatar Preview</h3>
                             {user?.avatar ? <AnimatedAvatar avatar={user.avatar} size={150} /> : <AnimatedAvatar size={150} />}
