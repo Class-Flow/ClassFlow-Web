@@ -79,8 +79,15 @@ export const AuthProvider = ({ children }) => {
         return data;
     };
 
-    const updateUser = (userData) => {
-        setUser(userData);
+    const updateUser = async (userData) => {
+        try {
+            const updated = await authService.updateMe(userData);
+            setUser(updated);
+            return updated;
+        } catch (error) {
+            console.error("Failed to update user profile", error);
+            throw error;
+        }
     };
 
     const value = {

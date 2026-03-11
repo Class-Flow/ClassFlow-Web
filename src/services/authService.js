@@ -46,6 +46,15 @@ export const authService = {
         }
     },
 
+    // Update current user
+    updateMe: async (userData) => {
+        const response = await api.put('/auth/me', userData);
+        if (response.data) {
+            sessionStorage.setItem('user', JSON.stringify(response.data));
+        }
+        return response.data;
+    },
+
     // Get stored user
     getCurrentUser: () => {
         const userStr = sessionStorage.getItem('user');
