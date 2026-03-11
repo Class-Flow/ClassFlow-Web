@@ -22,6 +22,7 @@ import {
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import AddEventModal from '../components/AddEventModal';
+import EventDetailsModal from '../components/EventDetailsModal';
 import AnimatedAvatar from '../components/AnimatedAvatar';
 import GamificationPopup from '../components/GamificationPopup';
 import { eventService } from '../services/eventService';
